@@ -1,12 +1,10 @@
-import { Outlet } from 'react-router-dom';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { Router } from './router'; // Импортируем Router
 import './styles/App.css';
 
-function App() {
-  return (
-    <div className="app">
-      <Outlet />
-    </div>
-  );
-}
-
-export default App;
+ReactDOM.createRoot(document.getElementById('root')!).render(
+    <React.StrictMode>
+        <Router />
+    </React.StrictMode>,
+);

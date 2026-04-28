@@ -1,11 +1,9 @@
 package org.sharing.carsharing.model;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.sharing.carsharing.model.enums.Role;
+import org.sharing.carsharing.model.enums.ServiceType;
 
 import java.util.List;
 
@@ -13,8 +11,9 @@ import java.util.List;
 @Table(name="users")
 @Getter
 @Setter
-@RequiredArgsConstructor
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,4 +51,12 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Order> orders;
+
+    @Column(name="service_id")
+    private Long serviceId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="service_type")
+    private ServiceType serviceType;
+
 }

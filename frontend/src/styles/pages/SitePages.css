@@ -1,0 +1,167 @@
+.site-shell {
+  min-height: 100vh;
+  background: #f4f7fb;
+}
+
+.site-container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.site-header .site-container {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #111827;
+  text-decoration: none;
+}
+
+.site-nav {
+  display: flex;
+  gap: 18px;
+}
+
+.site-nav a {
+  color: #4b5563;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.site-nav a.active {
+  color: #2563eb;
+}
+
+.site-auth-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.site-auth-primary {
+  background: #2563eb;
+  color: #fff !important;
+  border-radius: 10px;
+  padding: 8px 14px;
+  text-decoration: none;
+}
+
+.site-main {
+  padding: 28px 0 40px;
+}
+
+.page {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 28px;
+}
+
+.page h1 {
+  margin: 0 0 8px;
+  font-size: 32px;
+  color: #111827;
+}
+
+.page h2 {
+  margin: 26px 0 12px;
+  color: #111827;
+}
+
+.page-subtitle {
+  color: #6b7280;
+  margin-bottom: 22px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.stats-grid article {
+  background: #eef2ff;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.stats-grid h3 {
+  margin: 0;
+  font-size: 24px;
+  color: #1e3a8a;
+}
+
+.stats-grid p {
+  margin: 4px 0 0;
+  color: #475569;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.info-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  background: #fff;
+}
+
+.info-card h3 {
+  margin: 0 0 8px;
+}
+
+.profile-box {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #f9fafb;
+  padding: 16px;
+}
+
+.simple-list {
+  margin: 0;
+  padding-left: 20px;
+  color: #374151;
+}
+
+.page-center {
+  text-align: center;
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 8px;
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .site-nav {
+    display: none;
+  }
+
+  .cards-grid,
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

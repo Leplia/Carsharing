@@ -1,6 +1,7 @@
 package org.sharing.carsharing.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.sharing.carsharing.dto.AuthResponse;
 import org.sharing.carsharing.dto.LoginRequest;
 import org.sharing.carsharing.dto.RegistrationRequest;
 import org.sharing.carsharing.dto.UserDto;
@@ -8,8 +9,10 @@ import org.sharing.carsharing.mapper.user.UserCredentialsMapper;
 import org.sharing.carsharing.mapper.user.UserMapper;
 import org.sharing.carsharing.model.User;
 import org.sharing.carsharing.model.enums.Role;
+import org.sharing.carsharing.model.enums.ServiceType;
 import org.sharing.carsharing.repository.UserRepository;
 import org.sharing.carsharing.service.AuthService;
+import org.sharing.carsharing.util.JwtTokenProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +23,17 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final UserCredentialsMapper userCredentialsMapper;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    public UserDto register(RegistrationRequest registrationRequest) {
+    public AuthResponse register(RegistrationRequest registrationRequest) {
+        ServiceType serviceType = registrationRequest.getServiceType();
+        if (serviceType == null) {
+            throw new RuntimeException("Не указан тип регистрации");
+        }
+        if (serviceType != ServiceType.LOCAL) {
+            throw new RuntimeException("Регистрация через эту форму доступна только для LOCAL");
+        }
         if(userRepository.existsByEmail(registrationRequest.getEmail())){
             throw new RuntimeException("Емэйл");
         }
@@ -41,28 +52,53 @@ public class AuthServiceImpl implements AuthService {
         user.setBlocked(false);
         user.setRating(5F);
         user.setCredentials(null);
-
-        return userMapper.toDto(userRepository.save(user));
+        user.setServiceType(ServiceType.LOCAL);
+        user.setServiceId(null);
+        User savedUser = userRepository.save(user);
+        String token = jwtTokenProvider.generateToken(savedUser.getLogin(), savedUser.getUserId());
+        return new AuthResponse(userMapper.toDto(savedUser), token);
     }
 
     @Override
-    public UserDto login(LoginRequest loginRequest) {
-        if (!userRepository.existsByEmail(loginRequest.getLogmail())){
-            throw new RuntimeException("Email");
+    public AuthResponse login(LoginRequest loginRequest) {
+        ServiceType serviceType = loginRequest.getServiceType();
+        if (serviceType == null) {
+            throw new RuntimeException("Не указан тип авторизации");
         }
-        if(!userRepository.existsByLogin(loginRequest.getLogmail())){
-            throw new RuntimeException("Логин");
-        }
-        User user=new User();
-        if (loginRequest.getLogmail().contains("@")){
-            user=userRepository.findByEmail(loginRequest.getLogmail()).orElseThrow(()->new RuntimeException("ошибка получения емайла"));
+        User user;
+        if (loginRequest.getLogmail().contains("@")) {
+            user = userRepository.findByEmail(loginRequest.getLogmail())
+                    .orElseThrow(() -> new RuntimeException("Пользователь с таким email не найден"));
         }
         else {
-            user=userRepository.findByLogin(loginRequest.getLogmail()).orElseThrow(()->new RuntimeException("ошибка получения логина"));
+            user = userRepository.findByLogin(loginRequest.getLogmail())
+                    .orElseThrow(() -> new RuntimeException("Пользователь с таким логином не найден"));
         }
-        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())){
-            throw new RuntimeException("paroli");
+        if (serviceType != ServiceType.LOCAL) {
+            throw new RuntimeException("Через этот endpoint поддерживается только LOCAL вход");
         }
+        if (user.getServiceType() == ServiceType.GITHUB) {
+            throw new RuntimeException("Этот аккаунт зарегистрирован через GitHub");
+        }
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Неверный пароль");
+        }
+        String token = jwtTokenProvider.generateToken(user.getLogin(), user.getUserId());
+        return new AuthResponse(userMapper.toDto(user), token);
+    }
+
+    @Override
+    public UserDto getCurrentUser(String bearerToken) {
+        if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
+            throw new RuntimeException("Требуется Authorization Bearer token");
+        }
+        String token = bearerToken.substring(7);
+        if (!jwtTokenProvider.validateToken(token)) {
+            throw new RuntimeException("Некорректный токен");
+        }
+        String login = jwtTokenProvider.getUsername(token);
+        User user = userRepository.findByLogin(login)
+                .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
         return userMapper.toDto(user);
     }
 }

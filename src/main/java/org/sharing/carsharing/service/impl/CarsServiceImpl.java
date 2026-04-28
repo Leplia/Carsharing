@@ -20,7 +20,7 @@ public class CarsServiceImpl implements CarsService {
 
     @Override
     public List<CarDto> getAvailableCars(){
-        List<Car> cars = carsRepository.findAllAvailable();
+        List<Car> cars = carsRepository.findAllByCarStatus(CarStatus.AVAILABLE);
         return cars.stream().map(carMapper::toDto).toList();
     }
 

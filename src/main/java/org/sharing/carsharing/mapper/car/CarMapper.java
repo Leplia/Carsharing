@@ -7,6 +7,6 @@ import org.sharing.carsharing.model.Car;
 
 @Mapper(componentModel = "spring", uses = CarModelMapper.class)
 public interface CarMapper {
-    @Mapping(source = "carModel", target = "carModel")
+    @Mapping(source = "carModel", target = "carModelDto")
     CarDto toDto(Car car);
 }

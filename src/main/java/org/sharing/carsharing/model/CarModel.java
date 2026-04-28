@@ -1,9 +1,7 @@
 package org.sharing.carsharing.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.sharing.carsharing.model.enums.BodyType;
 import org.sharing.carsharing.model.enums.Transmission;
 
@@ -11,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
 @Table(name="car_models")

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.sharing.carsharing.model.enums.Role;
+import org.sharing.carsharing.model.enums.ServiceType;
 
 @RequiredArgsConstructor
 @Getter
@@ -16,5 +17,6 @@ public class UserDto {
     private Boolean blocked;
     private Float rating;
     private Role role;
+    private ServiceType serviceType;
     private UserCredentialsDto credentials;
 }
