@@ -57,4 +57,10 @@ public class UserController {
         return ResponseEntity.ok(userCredentialsDto);
     }
 
+    @PutMapping("/verifyUser/{id}")
+    public ResponseEntity<UserDto> verifyUser(@PathVariable Long id, @RequestBody UserVerificationRequest verificationRequest) {
+        UserDto userDto = userService.verifyUser(id, verificationRequest);
+        return ResponseEntity.ok(userDto);
+    }
+
 }

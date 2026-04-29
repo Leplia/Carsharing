@@ -55,4 +55,7 @@ public class Car {
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Order> orders;
+
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<CarPhoto> photos;
 }

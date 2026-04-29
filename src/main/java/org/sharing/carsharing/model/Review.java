@@ -30,4 +30,13 @@ public class Review {
 
     @Column(name="review_date")
     private LocalDateTime reviewDate;
+
+    @Column(name="admin_reply", length = 2000)
+    private String adminReply;
+
+    @Column(name="reply_date")
+    private LocalDateTime replyDate;
+
+    @Column(name="rating")
+    private Integer rating;
 }

@@ -59,4 +59,7 @@ public class User {
     @Column(name="service_type")
     private ServiceType serviceType;
 
+    @Column(name="is_verified")
+    private Boolean verified;
+
 }

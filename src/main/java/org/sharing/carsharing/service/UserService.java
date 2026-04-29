@@ -18,4 +18,6 @@ public interface UserService {
     UserDto changeRating(Long id, UserRatingEditRequest userRatingEditRequest);
 
     UserCredentialsDto addCredentials(Long id, UserCredentialsAddRequest userCredentialsAddRequest);
+    
+    UserDto verifyUser(Long id, UserVerificationRequest verificationRequest);
 }

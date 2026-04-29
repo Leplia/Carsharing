@@ -12,7 +12,7 @@ const STORAGE_KEYS = {
     USER_DATA: 'userData'
 } as const;
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = 'http://localhost:8081';
 
 class AuthApi {
     /**

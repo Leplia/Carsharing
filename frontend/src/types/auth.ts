@@ -1,7 +1,7 @@
 export enum Role {
     USER = 'USER',
     ADMIN = 'ADMIN',
-    MANAGER = 'MANAGER'
+    SISADMIN = 'SISADMIN',
 }
 
 export enum ServiceType {
@@ -10,20 +10,23 @@ export enum ServiceType {
 }
 
 export interface UserCredentialsDto {
-    login?: string;
-    email?: string;
-    // добавьте другие поля, если есть
+    firstName?: string;
+    lastName?: string;
+    passportNumber?: string;
+    driverLicense?: string;
 }
 
 export interface UserDto {
+    userId: number;
     login: string;
     email: string;
     phone: string;
     blocked: boolean;
+    verified: boolean;
     rating: number;
     role: Role;
     serviceType: ServiceType;
-    credentials: UserCredentialsDto;
+    credentials: UserCredentialsDto | null;
 }
 
 export interface RegistrationRequest {
@@ -35,7 +38,7 @@ export interface RegistrationRequest {
 }
 
 export interface LoginRequest {
-    logmail: string;  // может быть email или login
+    logmail: string;
     password: string;
     serviceType: ServiceType;
 }

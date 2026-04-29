@@ -4,8 +4,8 @@ const BenefitsPanel: React.FC = () => {
     return (
         <div className="auth-benefits">
             <div className="benefits-logo">
-                <h1>🚗 CarShare</h1>
-                <p>Каршеринг твоей мечты</p>
+                <h1>CarShare</h1>
+                <p>Городской каршеринг</p>
             </div>
 
             <div className="benefits-title">
@@ -15,7 +15,7 @@ const BenefitsPanel: React.FC = () => {
 
             <div className="benefits-list">
                 <div className="benefit-item">
-                    <div className="benefit-icon">⚡</div>
+                    <div className="benefit-icon benefit-icon--bolt"></div>
                     <div className="benefit-content">
                         <h3>Мгновенная аренда</h3>
                         <p>Арендуйте авто за 2 минуты без очередей и бумажной волокиты</p>
@@ -23,7 +23,7 @@ const BenefitsPanel: React.FC = () => {
                 </div>
 
                 <div className="benefit-item">
-                    <div className="benefit-icon">🔒</div>
+                    <div className="benefit-icon benefit-icon--shield"></div>
                     <div className="benefit-content">
                         <h3>Полная безопасность</h3>
                         <p>Все автомобили застрахованы и проходят регулярное ТО</p>
@@ -31,15 +31,15 @@ const BenefitsPanel: React.FC = () => {
                 </div>
 
                 <div className="benefit-item">
-                    <div className="benefit-icon">💰</div>
+                    <div className="benefit-icon benefit-icon--price"></div>
                     <div className="benefit-content">
                         <h3>Доступные цены</h3>
-                        <p>От 5₽/минута. Специальные тарифы на длительную аренду</p>
+                        <p>От 5 ₽/минута. Специальные тарифы на длительную аренду</p>
                     </div>
                 </div>
 
                 <div className="benefit-item">
-                    <div className="benefit-icon">📍</div>
+                    <div className="benefit-icon benefit-icon--location"></div>
                     <div className="benefit-content">
                         <h3>Удобное расположение</h3>
                         <p>Более 200 парковок по всему городу. Всегда есть авто рядом</p>
@@ -47,7 +47,7 @@ const BenefitsPanel: React.FC = () => {
                 </div>
 
                 <div className="benefit-item">
-                    <div className="benefit-icon">🔄</div>
+                    <div className="benefit-icon benefit-icon--support"></div>
                     <div className="benefit-content">
                         <h3>Круглосуточная поддержка</h3>
                         <p>24/7 помогаем с любыми вопросами. Всегда на связи</p>
@@ -65,7 +65,7 @@ const BenefitsPanel: React.FC = () => {
                     <div className="stat-label">Автомобилей</div>
                 </div>
                 <div className="stat-item">
-                    <div className="stat-number">4.9 ★</div>
+                    <div className="stat-number">4.9</div>
                     <div className="stat-label">Рейтинг</div>
                 </div>
             </div>

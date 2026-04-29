@@ -407,6 +407,21 @@ body {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
+.car-placeholder-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 40px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+}
+
 .car-features {
     position: absolute;
     bottom: 0;
@@ -680,6 +695,13 @@ body {
     margin-bottom: 20px;
 }
 
+.car-preview-icon-svg {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    color: #667eea;
+}
+
 .car-preview-card h3 {
     font-size: 20px;
     margin-bottom: 10px;
@@ -749,6 +771,20 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 30px;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.review-avatar-text {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 700;
     margin-bottom: 20px;
     color: white;
 }

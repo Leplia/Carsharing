@@ -84,4 +84,12 @@ public class UserServiceImpl implements UserService {
                 .user(userRepository.findById(id).orElseThrow(()->new RuntimeException("user not found")))
                 .build()));
     }
+
+    @Override
+    public UserDto verifyUser(Long id, UserVerificationRequest verificationRequest) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setVerified(verificationRequest.getVerified());
+        return userMapper.toDto(userRepository.save(user));
+    }
 }

@@ -16,10 +16,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.Optional;
 
 @Component
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
+
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -35,37 +39,50 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
+
         OAuth2User oauthUser = (OAuth2User) authentication.getPrincipal();
-        String email = oauthUser.getAttribute("email");
-        String login = oauthUser.getAttribute("login");
-        Number githubIdValue = oauthUser.getAttribute("id");
+        Map<String, Object> attrs = oauthUser.getAttributes();
 
-        if (login == null || login.isBlank()) {
-            login = email != null && email.contains("@") ? email.substring(0, email.indexOf("@")) : "github_user";
-        }
+        // GitHub provides 'login' as username, 'email' may be null if private
+        String login = (String) attrs.get("login");
+        String email = (String) attrs.get("email");
+        Number githubIdValue = (Number) attrs.get("id");
 
-        if (email == null || email.isBlank()) {
-            email = login + "@users.noreply.github.com";
-        }
         if (githubIdValue == null) {
             redirectWithError(response, "Не удалось получить GitHub ID");
             return;
         }
 
         Long githubId = githubIdValue.longValue();
-        final String resolvedEmail = email;
+
+        // Fallback for missing login
+        if (login == null || login.isBlank()) {
+            login = "github_" + githubId;
+        }
+
+        // Fallback for private/missing email — GitHub uses noreply address
+        if (email == null || email.isBlank()) {
+            email = githubId + "+github@users.noreply.github.com";
+        }
+
         final String resolvedLogin = login;
-        Optional<User> githubUser = userRepository.findByServiceTypeAndServiceId(ServiceType.GITHUB, githubId);
+        final String resolvedEmail = email;
+
+        // Try to find existing GitHub user
+        Optional<User> existingGithubUser = userRepository.findByServiceTypeAndServiceId(ServiceType.GITHUB, githubId);
         User user;
 
-        if (githubUser.isPresent()) {
-            user = githubUser.get();
+        if (existingGithubUser.isPresent()) {
+            user = existingGithubUser.get();
         } else {
+            // Check if email is already taken by a LOCAL account
             Optional<User> existingByEmail = userRepository.findByEmail(resolvedEmail);
             if (existingByEmail.isPresent() && existingByEmail.get().getServiceType() == ServiceType.LOCAL) {
-                redirectWithError(response, "Аккаунт с таким email зарегистрирован локально. Используйте обычный вход.");
+                redirectWithError(response,
+                    "Аккаунт с таким email уже зарегистрирован. Используйте обычный вход.");
                 return;
             }
+
             User newUser = new User();
             newUser.setEmail(resolvedEmail);
             newUser.setLogin(generateUniqueLogin(resolvedLogin));
@@ -73,7 +90,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             newUser.setPassword("");
             newUser.setRole(Role.USER);
             newUser.setBlocked(false);
-            newUser.setRating(5F);
+            newUser.setRating(5.0F);
             newUser.setCredentials(null);
             newUser.setServiceType(ServiceType.GITHUB);
             newUser.setServiceId(githubId);
@@ -81,6 +98,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         }
 
         String token = jwtTokenProvider.generateToken(user.getLogin(), user.getUserId());
+
         String redirectUrl = UriComponentsBuilder.fromUriString(frontendRedirectUri)
                 .queryParam("token", token)
                 .build()
@@ -100,8 +118,8 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     private void redirectWithError(HttpServletResponse response, String errorMessage) throws IOException {
         String redirectUrl = UriComponentsBuilder.fromUriString(frontendRedirectUri)
-                .queryParam("error", errorMessage)
-                .build()
+                .queryParam("error", URLEncoder.encode(errorMessage, StandardCharsets.UTF_8))
+                .build(true)
                 .toUriString();
         response.sendRedirect(redirectUrl);
     }
