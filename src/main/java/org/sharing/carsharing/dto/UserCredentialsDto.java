@@ -16,4 +16,5 @@ public class UserCredentialsDto {
     private String driverLicense;
     private LocalDateTime verificationDate;
     private LocalDateTime birthDate;
+    private Boolean verified;
 }

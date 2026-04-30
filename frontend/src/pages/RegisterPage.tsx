@@ -40,7 +40,7 @@ const RegisterPage: React.FC = () => {
       newErrors.phone = 'Формат: +7XXXXXXXXXX'; isValid = false;
     }
     if (!formData.password) { newErrors.password = 'Пароль обязателен'; isValid = false; }
-    else if (formData.password.length < 6) { newErrors.password = 'Минимум 6 символов'; isValid = false; }
+    else if ((formData.password as String).length < 6) { newErrors.password = 'Минимум 6 символов'; isValid = false; }
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Пароли не совпадают'; isValid = false;
     }
@@ -111,7 +111,7 @@ const RegisterPage: React.FC = () => {
               variant="outline"
               size="large"
               fullWidth
-              onClick={() => { window.location.href = 'http://localhost:8081/oauth2/authorization/github'; }}
+              onClick={() => { window.location.href = 'http://localhost:8080/oauth2/authorization/github'; }}
             >
               <span className="github-icon" />
               Зарегистрироваться через GitHub

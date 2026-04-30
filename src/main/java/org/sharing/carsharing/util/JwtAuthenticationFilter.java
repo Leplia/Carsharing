@@ -100,7 +100,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         @Override
         public Enumeration<String> getHeaderNames() {
-            java.util.Set<String> names = (Set<String>) Collections.list(super.getHeaderNames());
+            java.util.Set<String> names = new HashSet<>(Collections.list(super.getHeaderNames()));
             names.addAll(additionalHeaders.keySet());
             return Collections.enumeration(names);
         }

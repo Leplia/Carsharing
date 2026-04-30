@@ -99,7 +99,14 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         String token = jwtTokenProvider.generateToken(user.getLogin(), user.getUserId());
 
-        String redirectUrl = UriComponentsBuilder.fromUriString(frontendRedirectUri)
+        // Check if user needs to complete profile (no phone or password)
+        boolean needsProfileCompletion = user.getPhone() == null || user.getPhone().isBlank() || 
+                                         user.getPhone().equals("+70000000000") ||
+                                         user.getPassword() == null || user.getPassword().isBlank();
+
+        String redirectPath = needsProfileCompletion ? "/complete-profile" : frontendRedirectUri;
+
+        String redirectUrl = UriComponentsBuilder.fromUriString(redirectPath)
                 .queryParam("token", token)
                 .build()
                 .toUriString();

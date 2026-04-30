@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,15 +28,34 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(Long id,UserUpdateRequest userUpdateRequest) {
         User user = userRepository.findById(id)
                 .orElseThrow(()->new RuntimeException("User not found"));
-        UserCredentials userCredentials= userCredentialsRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("user credentials not found"));
-        userCredentials.setFirstName(userUpdateRequest.getUserCredentialUpdateRequest().getFirstName());
-        userCredentials.setLastName(userUpdateRequest.getUserCredentialUpdateRequest().getLastName());
-        user.setPassword(passwordEncoder.encode(userUpdateRequest.getPassword()));
-        user.setCredentials(userCredentials);
-        user.setEmail(userUpdateRequest.getEmail());
-        user.setLogin(userUpdateRequest.getLogin());
-        user.setPhone(userUpdateRequest.getPhone());
+
+        if (userUpdateRequest.getUserCredentialUpdateRequest() != null) {
+            Optional<UserCredentials> userCredentialsOptional = Optional.ofNullable(user.getCredentials());
+            if (userCredentialsOptional.isPresent()) {
+                UserCredentials userCredentials = userCredentialsOptional.get();
+                if (userUpdateRequest.getUserCredentialUpdateRequest().getFirstName() != null) {
+                    userCredentials.setFirstName(userUpdateRequest.getUserCredentialUpdateRequest().getFirstName());
+                }
+                if (userUpdateRequest.getUserCredentialUpdateRequest().getLastName() != null) {
+                    userCredentials.setLastName(userUpdateRequest.getUserCredentialUpdateRequest().getLastName());
+                }
+                userCredentialsRepository.save(userCredentials);
+                user.setCredentials(userCredentials);
+            }
+        }
+
+        if (userUpdateRequest.getPassword() != null && !userUpdateRequest.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(userUpdateRequest.getPassword()));
+        }
+        if (userUpdateRequest.getEmail() != null) {
+            user.setEmail(userUpdateRequest.getEmail());
+        }
+        if (userUpdateRequest.getLogin() != null) {
+            user.setLogin(userUpdateRequest.getLogin());
+        }
+        if (userUpdateRequest.getPhone() != null) {
+            user.setPhone(userUpdateRequest.getPhone());
+        }
 
         return userMapper.toDto(userRepository.save(user));
     }
@@ -54,6 +74,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto setUserRole(Long id, UserRoleRequest userRoleRequest){
+        if (userRoleRequest == null || userRoleRequest.getRole() == null) {
+            throw new IllegalArgumentException("Role is required");
+        }
         User user = userRepository.findById(id).orElseThrow(()->new RuntimeException("User not found"));
         user.setRole(userRoleRequest.getRole());
         return userMapper.toDto(userRepository.save(user));
@@ -74,22 +97,45 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserCredentialsDto addCredentials(Long id, UserCredentialsAddRequest userCredentialsAddRequest){
-        return userCredentialsMapper.toDto(userCredentialsRepository.save(UserCredentials.builder()
-                .firstName(userCredentialsAddRequest.getFirstName())
-                .lastName(userCredentialsAddRequest.getLastName())
-                .passportNumber(userCredentialsAddRequest.getPassportNumber())
-                .birthDate(userCredentialsAddRequest.getBirthDate())
-                .driverLicence(userCredentialsAddRequest.getDriverLicence())
-                .verificationDate(userCredentialsAddRequest.getVerificationDate())
-                .user(userRepository.findById(id).orElseThrow(()->new RuntimeException("user not found")))
-                .build()));
+        User user = userRepository.findById(id).orElseThrow(()->new RuntimeException("user not found"));
+        UserCredentials credentials = Optional.ofNullable(user.getCredentials()).orElseGet(UserCredentials::new);
+        credentials.setFirstName(userCredentialsAddRequest.getFirstName());
+        credentials.setLastName(userCredentialsAddRequest.getLastName());
+        credentials.setPassportNumber(userCredentialsAddRequest.getPassportNumber());
+        credentials.setBirthDate(userCredentialsAddRequest.getBirthDate());
+        credentials.setDriverLicence(userCredentialsAddRequest.getDriverLicence());
+        credentials.setVerificationDate(userCredentialsAddRequest.getVerificationDate());
+        credentials.setVerified(false);
+        UserCredentials savedCredentials = userCredentialsRepository.save(credentials);
+        user.setCredentials(savedCredentials);
+        user.setVerified(false);
+        userRepository.save(user);
+        return userCredentialsMapper.toDto(savedCredentials);
     }
 
     @Override
     public UserDto verifyUser(Long id, UserVerificationRequest verificationRequest) {
+        if (verificationRequest == null || verificationRequest.getVerified() == null) {
+            throw new IllegalArgumentException("Verified flag is required");
+        }
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        user.setVerified(verificationRequest.getVerified());
+        if (Boolean.TRUE.equals(verificationRequest.getVerified())) {
+            user.setVerified(true);
+            if (user.getCredentials() != null) {
+                user.getCredentials().setVerified(true);
+                userCredentialsRepository.save(user.getCredentials());
+            }
+        } else {
+            user.setVerified(false);
+            UserCredentials credentials = user.getCredentials();
+            if (credentials != null) {
+                user.setCredentials(null);
+                userRepository.save(user);
+                userCredentialsRepository.delete(credentials);
+                return userMapper.toDto(user);
+            }
+        }
         return userMapper.toDto(userRepository.save(user));
     }
 }

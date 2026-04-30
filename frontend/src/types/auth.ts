@@ -14,6 +14,7 @@ export interface UserCredentialsDto {
     lastName?: string;
     passportNumber?: string;
     driverLicense?: string;
+    verified?: boolean;
 }
 
 export interface UserDto {

@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import {
     UserDto,
     RegistrationRequest,
@@ -12,27 +12,15 @@ const STORAGE_KEYS = {
     USER_DATA: 'userData'
 } as const;
 
-const BASE_URL = 'http://localhost:8081';
+export const BASE_URL = 'http://localhost:8080';
 
 class AuthApi {
-    /**
-     * Вспомогательный метод для получения хедеров.
-     * Вызываем его в каждом запросе.
-     */
     private getHeaders() {
         const token = this.getAccessToken();
-        const headers: Record<string, string> = {
-            'Content-Type': 'application/json',
-        };
-
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
-        }
-
+        const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
         return headers;
     }
-
-    // --- Методы работы с LocalStorage ---
 
     private setAccessToken(token: string): void {
         if (typeof window !== 'undefined') localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, token);
@@ -54,13 +42,11 @@ class AuthApi {
         return null;
     }
 
-    private clearStorage(): void {
+    clearStorage(): void {
         if (typeof window !== 'undefined') {
             Object.values(STORAGE_KEYS).forEach(key => localStorage.removeItem(key));
         }
     }
-
-    // --- API Методы ---
 
     private saveSession(response: AuthResponse): void {
         this.setAccessToken(response.accessToken);
@@ -72,33 +58,19 @@ class AuthApi {
     }
 
     async register(data: RegistrationRequest): Promise<AuthResponse> {
-        try {
-            const response: AxiosResponse<AuthResponse> = await axios.post(
-                `${BASE_URL}/api/auth/register`,
-                data,
-                { headers: this.getHeaders() }
-            );
-            this.saveSession(response.data);
-            return response.data;
-        } catch (error) {
-            this.handleError(error);
-            throw error;
-        }
+        const response: AxiosResponse<AuthResponse> = await axios.post(
+            `${BASE_URL}/api/auth/register`, data, { headers: this.getHeaders() }
+        );
+        this.saveSession(response.data);
+        return response.data;
     }
 
     async login(data: LoginRequest): Promise<AuthResponse> {
-        try {
-            const response: AxiosResponse<AuthResponse> = await axios.post(
-                `${BASE_URL}/api/auth/login`,
-                data,
-                { headers: this.getHeaders() }
-            );
-            this.saveSession(response.data);
-            return response.data;
-        } catch (error) {
-            this.handleError(error);
-            throw error;
-        }
+        const response: AxiosResponse<AuthResponse> = await axios.post(
+            `${BASE_URL}/api/auth/login`, data, { headers: this.getHeaders() }
+        );
+        this.saveSession(response.data);
+        return response.data;
     }
 
     async logout(): Promise<void> {
@@ -106,17 +78,15 @@ class AuthApi {
     }
 
     async getCurrentUser(): Promise<UserDto | null> {
-        const cachedUser = this.getUserData();
-        if (cachedUser && this.getAccessToken()) return cachedUser;
-
+        const token = this.getAccessToken();
+        if (!token) return null;
         try {
             const response: AxiosResponse<UserDto> = await axios.get(
-                `${BASE_URL}/api/auth/me`,
-                { headers: this.getHeaders() }
+                `${BASE_URL}/api/auth/me`, { headers: this.getHeaders() }
             );
             this.setUserData(response.data);
             return response.data;
-        } catch (error) {
+        } catch {
             this.clearStorage();
             return null;
         }

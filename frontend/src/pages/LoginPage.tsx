@@ -36,8 +36,13 @@ const LoginPage: React.FC = () => {
       authApi.setAccessTokenFromOAuth(token);
       authApi.getCurrentUser().then((user) => {
         if (user) {
-          login(user);
-          navigate('/map');
+          // Check if user needs to complete profile
+          if (!user.phone || user.phone === '+70000000000' || !user.phone.startsWith('+')) {
+            navigate('/complete-profile?token=' + token);
+          } else {
+            login(user);
+            navigate('/map');
+          }
         }
       }).catch(() => setServerError('Не удалось выполнить вход через GitHub'));
     }
@@ -135,7 +140,7 @@ const LoginPage: React.FC = () => {
               variant="outline"
               size="large"
               fullWidth
-              onClick={() => { window.location.href = 'http://localhost:8081/oauth2/authorization/github'; }}
+              onClick={() => { window.location.href = 'http://localhost:8080/oauth2/authorization/github'; }}
             >
               <span className="github-icon" />
               Войти через GitHub

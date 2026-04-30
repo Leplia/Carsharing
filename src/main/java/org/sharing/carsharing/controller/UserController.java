@@ -3,6 +3,8 @@ package org.sharing.carsharing.controller;
 import lombok.RequiredArgsConstructor;
 import org.sharing.carsharing.dto.*;
 import org.sharing.carsharing.model.User;
+import org.sharing.carsharing.model.enums.Role;
+import org.sharing.carsharing.service.AdminAccessService;
 import org.sharing.carsharing.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final AdminAccessService adminAccessService;
 
     @PutMapping("/updateUser/{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserUpdateRequest userUpdateRequest) {
@@ -34,7 +37,11 @@ public class UserController {
     }
 
     @PutMapping("/setUserRole/{id}")
-    public ResponseEntity<UserDto> setUserRole(@PathVariable Long id, @RequestBody UserRoleRequest userRoleRequest) {
+    public ResponseEntity<UserDto> setUserRole(
+            @PathVariable Long id,
+            @RequestBody UserRoleRequest userRoleRequest,
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        adminAccessService.requireAnyRole(authHeader, Role.SISADMIN);
         UserDto userDto=userService.setUserRole(id, userRoleRequest);
         return ResponseEntity.ok(userDto);
     }
@@ -58,7 +65,11 @@ public class UserController {
     }
 
     @PutMapping("/verifyUser/{id}")
-    public ResponseEntity<UserDto> verifyUser(@PathVariable Long id, @RequestBody UserVerificationRequest verificationRequest) {
+    public ResponseEntity<UserDto> verifyUser(
+            @PathVariable Long id,
+            @RequestBody UserVerificationRequest verificationRequest,
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        adminAccessService.requireAnyRole(authHeader, Role.ADMIN);
         UserDto userDto = userService.verifyUser(id, verificationRequest);
         return ResponseEntity.ok(userDto);
     }

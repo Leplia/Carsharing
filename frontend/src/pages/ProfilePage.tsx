@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import authApi from '../api/auth.api';
+import authApi, { BASE_URL } from '../api/auth.api';
 import { Role } from '../types/auth';
 import '../styles/pages/ProfilePage.css';
 
@@ -19,7 +19,15 @@ const ProfilePage: React.FC = () => {
         phone: user?.phone || '',
     });
 
-    const isVerified = !!user?.credentials;
+    useEffect(() => {
+        setEditData({
+            login: user?.login || '',
+            email: user?.email || '',
+            phone: user?.phone || '',
+        });
+    }, [user]);
+
+    const isVerified = !!user?.verified;
 
     const handleLogout = async () => {
         await logout();
@@ -39,7 +47,7 @@ const ProfilePage: React.FC = () => {
             const currentUser = authApi.getUserData();
             if (!currentUser) throw new Error('no user');
 
-            const response = await fetch(`http://localhost:8080/api/user/updateUser/${currentUser.userId || 1}`, {
+            const response = await fetch(`${BASE_URL}/api/user/updateUser/${currentUser.userId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -215,7 +223,7 @@ const ProfilePage: React.FC = () => {
                             </div>
                             <div className="profile-info-item">
                                 <label>Водительское удостоверение</label>
-                                <span>{'** ' + (user.credentials.driverLicense?.slice(-6) || '******')}</span>
+                                <span>{'** ' + ((user.credentials.driverLicense || (user.credentials as { driverLicence?: string }).driverLicence)?.slice(-6) || '******')}</span>
                             </div>
                             <div className="profile-info-item">
                                 <label>Статус</label>

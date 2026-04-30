@@ -1,13 +1,13 @@
 package org.sharing.carsharing.dto;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.sharing.carsharing.model.enums.Role;
 
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 public class UserRoleRequest {
-    public Role role;
+    private Role role;
 }

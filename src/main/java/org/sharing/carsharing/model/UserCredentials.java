@@ -36,6 +36,9 @@ public class UserCredentials {
     @Column(name="verification_date")
     private LocalDateTime verificationDate;
 
+    @Column(name = "verified")
+    private Boolean verified;
+
     @OneToOne(mappedBy = "credentials",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private User user;
 }

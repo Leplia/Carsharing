@@ -6,6 +6,8 @@ import org.sharing.carsharing.dto.carDto.CarDto;
 import org.sharing.carsharing.dto.carDto.CarModelOptionDto;
 import org.sharing.carsharing.dto.carDto.request.CarDeleteRequest;
 import org.sharing.carsharing.model.enums.CarStatus;
+import org.sharing.carsharing.model.enums.Role;
+import org.sharing.carsharing.service.AdminAccessService;
 import org.sharing.carsharing.service.CarsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CarsController {
     private final CarsService carsService;
+    private final AdminAccessService adminAccessService;
 
     @GetMapping("/getAvailableCars")
     public ResponseEntity<List<CarDto>> getAvailableCars() {
@@ -34,7 +37,10 @@ public class CarsController {
     }
 
     @PostMapping("/addCar")
-    public ResponseEntity<CarDto> addCar(@RequestBody CarAddRequest carAddRequest) {
+    public ResponseEntity<CarDto> addCar(
+            @RequestBody CarAddRequest carAddRequest,
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        adminAccessService.requireAnyRole(authHeader, Role.ADMIN);
         return ResponseEntity.ok(carsService.addCar(carAddRequest));
     }
 
