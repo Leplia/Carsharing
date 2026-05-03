@@ -401,7 +401,7 @@
 .map-legend {
   position: absolute;
   bottom: 16px;
-  right: 16px;
+  left: 16px;
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(8px);
   border-radius: 12px;
@@ -494,4 +494,706 @@
   margin-top: 10px;
   font-size: 14px;
   color: #dc2626;
+}
+/* Стили для функциональности маршрутов */
+.map-route-info {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.map-route-info h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.map-route-info p {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0 0 8px;
+  line-height: 1.4;
+}
+
+.map-route-info p:last-child {
+  margin-bottom: 0;
+}
+
+.map-distance {
+  font-size: 14px !important;
+  color: #111827 !important;
+  font-weight: 500;
+  margin-top: 12px !important;
+  padding-top: 12px;
+  border-top: 1px dashed #e5e7eb;
+}
+
+.map-distance strong {
+  color: #2563eb;
+  font-size: 16px;
+}
+
+.map-clear-route-btn {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.map-clear-route-btn:hover {
+  background: #fecaca;
+  border-color: #f87171;
+}
+
+/* Стили для маркеров и маршрутов */
+.leaflet-routing-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-width: 300px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.leaflet-routing-alt {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.leaflet-routing-alt h2 {
+  font-size: 14px;
+  margin: 0 0 8px;
+  color: #111827;
+}
+
+.leaflet-routing-alt table {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.leaflet-routing-alt table tr:hover {
+  background: #f9fafb;
+}
+
+/* Стили для элементов автомобилей */
+.map-car-item {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 10px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.map-car-item:hover {
+  border-color: #2563eb;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+  transform: translateY(-2px);
+}
+
+.map-car-item.selected {
+  border-color: #2563eb;
+  background: #eff6ff;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+  transform: translateY(-2px);
+}
+
+.map-car-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.map-car-model {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+  line-height: 1.3;
+  flex: 1;
+  margin-right: 8px;
+}
+
+.map-car-status {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid currentColor;
+  white-space: nowrap;
+}
+
+.map-car-item-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.map-car-price {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2563eb;
+  white-space: nowrap;
+}
+
+.map-car-item-fuel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+.fuel-bar {
+  flex: 1;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.fuel-bar > div {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+.fuel-bar {
+  flex: 1;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.fuel-bar > div {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+.map-loading {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.map-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #9ca3af;
+  font-size: 14px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.map-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* Кнопки фильтра */
+.map-filter-btn {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.map-filter-btn:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.map-filter-btn.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: white;
+}
+
+/* Инструкция для пользователя */
+.map-instruction {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  padding: 12px 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  max-width: 300px;
+  font-size: 13px;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+}
+
+.map-instruction h5 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 6px;
+}
+
+.map-instruction ul {
+  margin: 0;
+  padding-left: 16px;
+}
+
+.map-instruction li {
+  margin-bottom: 4px;
+}
+
+.map-instruction li:last-child {
+  margin-bottom: 0;
+}
+/* Стили для расчета стоимости и заказов */
+.map-cost-loading {
+  font-size: 13px;
+  color: #6b7280;
+  font-style: italic;
+  margin: 8px 0;
+  padding: 8px;
+  background: #f9fafb;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.map-cost-error {
+  font-size: 13px;
+  color: #dc2626;
+  margin: 8px 0;
+  padding: 8px;
+  background: #fef2f2;
+  border-radius: 6px;
+  border: 1px solid #fecaca;
+}
+
+.map-cost-result {
+  margin: 12px 0;
+  padding: 12px;
+  background: #f0f9ff;
+  border-radius: 8px;
+  border: 1px solid #bae6fd;
+}
+
+.map-cost-total {
+  font-size: 15px;
+  color: #0c4a6e;
+  margin: 0 0 12px 0;
+  font-weight: 500;
+}
+
+.map-cost-total strong {
+  font-size: 18px;
+  color: #0369a1;
+  font-weight: 600;
+}
+
+.map-create-order-btn {
+  background: #059669;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 100%;
+}
+
+.map-create-order-btn:hover:not(:disabled) {
+  background: #047857;
+}
+
+.map-create-order-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Активный заказ */
+.map-active-order {
+  margin: 12px 0;
+  padding: 12px;
+  background: #fef3c7;
+  border-radius: 8px;
+  border: 1px solid #fcd34d;
+}
+
+.map-active-order h5 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #92400e;
+  margin: 0 0 8px 0;
+}
+
+.map-active-order p {
+  font-size: 13px;
+  color: #92400e;
+  margin: 4px 0;
+}
+
+.map-end-order-btn {
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.map-end-order-btn:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+.map-end-order-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Ошибки заказа */
+.map-order-error {
+  font-size: 13px;
+  color: #dc2626;
+  margin: 8px 0;
+  padding: 8px;
+  background: #fef2f2;
+  border-radius: 6px;
+  border: 1px solid #fecaca;
+}
+
+/* Панель выбранного автомобиля */
+.map-car-panel {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  z-index: 1000;
+  width: 350px;
+  max-width: 350px;
+  border: 1px solid #e5e7eb;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.map-car-panel-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.map-car-panel-close:hover {
+  background: #f3f4f6;
+}
+
+.map-car-panel h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 12px 0;
+}
+
+.map-car-panel-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.map-car-panel-grid div {
+  font-size: 13px;
+}
+
+.map-car-panel-grid div span {
+  font-weight: 600;
+  color: #374151;
+  margin-right: 4px;
+}
+
+.map-car-description {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 8px 0 12px 0;
+  padding-top: 8px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.map-booking-msg {
+  font-size: 13px;
+  color: #dc2626;
+  margin: 8px 0;
+  padding: 8px;
+  background: #fef2f2;
+  border-radius: 6px;
+  border: 1px solid #fecaca;
+}
+
+.map-book-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 100%;
+}
+
+.map-book-btn:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.map-book-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.map-auth-msg {
+  font-size: 13px;
+  color: #6b7280;
+  text-align: center;
+  margin: 8px 0;
+  padding: 8px;
+  background: #f9fafb;
+  border-radius: 6px;
+}
+/* Стили для действий с автомобилем */
+.map-car-actions {
+  margin-top: 12px;
+}
+
+.map-start-ride-btn {
+  background: #059669;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 100%;
+}
+
+.map-start-ride-btn:hover:not(:disabled) {
+  background: #047857;
+}
+
+.map-start-ride-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.map-ride-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.map-action-hint {
+  font-size: 12px;
+  color: #6b7280;
+  text-align: center;
+  margin: 4px 0 0 0;
+}
+
+.map-in-use-msg {
+  font-size: 13px;
+  color: #1d4ed8;
+  text-align: center;
+  margin: 8px 0;
+  padding: 8px;
+  background: #dbeafe;
+  border-radius: 6px;
+  border: 1px solid #93c5fd;
+}
+
+.map-out-of-service-msg {
+  font-size: 13px;
+  color: #dc2626;
+  text-align: center;
+  margin: 8px 0;
+  padding: 8px;
+  background: #fef2f2;
+  border-radius: 6px;
+  border: 1px solid #fecaca;
+}
+/* Стили для инструкции с кнопками */
+.map-instruction-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  line-height: 1;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-instruction-close:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.map-instruction-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.map-instruction-understood {
+  flex: 1;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.map-instruction-understood:hover {
+  background: #1d4ed8;
+}
+
+.map-instruction-never-show {
+  flex: 1;
+  background: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.map-instruction-never-show:hover {
+  background: #e5e7eb;
+  border-color: #d1d5db;
+}
+/* Стили для кнопки "Закончить поездку" на карте */
+.map-end-ride-overlay {
+  position: absolute;
+  bottom: 80px;
+  left: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  z-index: 1000;
+  width: 90%;
+  max-width: 350px;
+  border: 1px solid #e5e7eb;
+}
+
+.map-end-ride-content {
+  text-align: center;
+}
+
+.map-end-ride-content h5 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 8px 0;
+}
+
+.map-end-ride-content p {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0 0 12px 0;
+}
+
+.map-end-ride-btn {
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 100%;
+}
+
+.map-end-ride-btn:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+.map-end-ride-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
 }

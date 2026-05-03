@@ -1,7 +1,7 @@
 package org.sharing.carsharing.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.sharing.carsharing.exception.AccessDeniedException;
+import org.sharing.carsharing.exception.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +54,38 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
                 .body(Map.of("message", "Недостаточно прав"));
+    }
+
+    @ExceptionHandler(CarNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleCarNotFound(CarNotFoundException ex) {
+        log.warn("Car not found: {}", ex.getMessage(), ex);
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(Map.of("message", "Автомобиль не найден"));
+    }
+
+    @ExceptionHandler(CarNotAvailableException.class)
+    public ResponseEntity<Map<String, String>> handleCarNotAvailable(CarNotAvailableException ex) {
+        log.warn("Car not available: {}", ex.getMessage(), ex);
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(Map.of("message", "Автомобиль не доступен"));
+    }
+
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleOrderNotFound(OrderNotFoundException ex) {
+        log.warn("Order not found: {}", ex.getMessage(), ex);
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(Map.of("message", "Заказ не найден"));
+    }
+
+    @ExceptionHandler(OrderAlreadyCompletedException.class)
+    public ResponseEntity<Map<String, String>> handleOrderAlreadyCompleted(OrderAlreadyCompletedException ex) {
+        log.warn("Order already completed: {}", ex.getMessage(), ex);
+        return ResponseEntity
+                .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .body(Map.of("message", "Заказ уже завершен"));
     }
 
     @ExceptionHandler(RuntimeException.class)

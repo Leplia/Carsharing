@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import authApi, { BASE_URL } from '../api/auth.api';
 import { Role } from '../types/auth';
+import UserTrips from '../components/profile/UserTrips';
 import '../styles/pages/ProfilePage.css';
 
 const ProfilePage: React.FC = () => {
@@ -259,24 +260,19 @@ const ProfilePage: React.FC = () => {
                             <div className="profile-stat-label">Пройдено</div>
                         </div>
                         <div className="profile-stat">
-                            <div className="profile-stat-val">0 ₽</div>
+                            <div className="profile-stat-val">0 BYN</div>
                             <div className="profile-stat-label">Потрачено</div>
                         </div>
                     </div>
                 </div>
 
-                {/* Recent trips placeholder */}
+                {/* Recent trips */}
                 <div className="profile-card profile-card-full">
                     <div className="profile-card-header">
-                        <h2>Последние поездки</h2>
+                        <h2>История поездок</h2>
                     </div>
-                    {isVerified ? (
-                        <div className="profile-empty-trips">
-                            <p>Поездок пока нет</p>
-                            <Link to="/map" className="profile-verif-link-btn">
-                                Найти автомобиль
-                            </Link>
-                        </div>
+                    {isVerified && user ? (
+                        <UserTrips userId={user.userId} />
                     ) : (
                         <div className="profile-empty-trips">
                             <p>Требуется верификация для доступа к аренде</p>
