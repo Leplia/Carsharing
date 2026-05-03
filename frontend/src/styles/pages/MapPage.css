@@ -391,3 +391,107 @@
   .map-sidebar { width: 100%; }
   .map-canvas { min-height: 300px; }
 }
+
+/* Контейнер карты */
+.map-canvas {
+  position: relative;
+}
+
+/* Легенда */
+.map-legend {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1000;
+}
+
+.map-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.map-legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Заглушка для будущей панели маршрутов */
+.map-route-panel {
+  border-top: 1px solid #e2e8f0;
+  padding: 16px;
+  background: #f8fafc;
+}
+
+.trip-control-panel {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  padding: 16px;
+  z-index: 1000;
+}
+.trip-control-content h4 {
+  margin: 0 0 12px;
+}
+.form-group {
+  margin-bottom: 12px;
+}
+.form-group label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: #374151;
+}
+.form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+}
+.trip-estimate {
+  background: #f3f4f6;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+.trip-cost {
+  font-weight: bold;
+  color: #059669;
+}
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+}
+.btn-primary:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+.booking-msg {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #dc2626;
+}

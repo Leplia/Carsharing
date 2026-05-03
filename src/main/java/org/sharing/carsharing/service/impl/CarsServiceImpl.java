@@ -81,4 +81,13 @@ public class CarsServiceImpl implements CarsService {
                 })
                 .toList();
     }
+
+    @Override
+    public CarDto refuelCar(Long id) {
+        Car car = carsRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Автомобиль с ID " + id + " не найден"));
+        car.setFuelLevel((int) 100.0);
+        Car saved = carsRepository.save(car);
+        return carMapper.toDto(saved);
+    }
 }

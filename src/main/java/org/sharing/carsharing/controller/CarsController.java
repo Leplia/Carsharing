@@ -36,6 +36,12 @@ public class CarsController {
         return ResponseEntity.ok(carsService.getCarModels());
     }
 
+    @PutMapping("/{id}/refuel")
+    public ResponseEntity<CarDto> refuelCar(@PathVariable Long id) {
+        CarDto updatedCar = carsService.refuelCar(id);
+        return ResponseEntity.ok(updatedCar);
+    }
+
     @PostMapping("/addCar")
     public ResponseEntity<CarDto> addCar(
             @RequestBody CarAddRequest carAddRequest,

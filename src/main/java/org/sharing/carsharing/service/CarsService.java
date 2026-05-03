@@ -15,4 +15,6 @@ public interface CarsService {
     CarDto updateCarStatus(Long id, CarStatus status);
     
     List<CarModelOptionDto> getCarModels();
+
+    CarDto refuelCar(Long id);
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../api/auth.api';
 import authApi from '../api/auth.api';
@@ -8,6 +8,8 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   PieChart, Pie, Cell, LineChart, Line, AreaChart, Area
 } from 'recharts';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import '../styles/pages/AdminManagementPage.css';
 
 interface CarModelOption {
@@ -69,6 +71,16 @@ const STATUS_TEXT_COLORS: Record<string, string> = {
   AVAILABLE: '#065f46', BOOKED: '#92400e', IN_USE: '#1d4ed8', OUT_OF_SERVICE: '#991b1b'
 };
 
+// ---------- Границы Минска ----------
+const MINSK_BOUNDS: L.LatLngBoundsExpression = [
+  [53.82, 27.42], // юго-запад
+  [53.95, 27.72]  // северо-восток
+];
+const MIN_LAT = 53.82;
+const MAX_LAT = 53.95;
+const MIN_LNG = 27.42;
+const MAX_LNG = 27.72;
+
 const AdminManagementPage: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -87,6 +99,11 @@ const AdminManagementPage: React.FC = () => {
   const [stats, setStats] = useState<AdminStatsDto | null>(null);
   const [users, setUsers] = useState<UserDto[]>([]);
 
+  // Refs для карты выбора координат
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<L.Map | null>(null);
+  const markerRef = useRef<L.Marker | null>(null);
+
   useEffect(() => {
     if (user?.role !== Role.ADMIN && user?.role !== Role.SISADMIN) {
       navigate('/map');
@@ -101,7 +118,8 @@ const AdminManagementPage: React.FC = () => {
 
   const [newCar, setNewCar] = useState({
     vinNumber: '', color: '', year: new Date().getFullYear().toString(),
-    locationX: '55.7558', locationY: '37.6173',
+    locationX: '53.9000',   // Минск центр по умолчанию
+    locationY: '27.5667',
     description: '', photoUrl: '', carModelId: ''
   });
 
@@ -122,6 +140,97 @@ const AdminManagementPage: React.FC = () => {
   };
 
   const showSuccess = (msg: string) => { setSuccess(msg); setTimeout(() => setSuccess(''), 3000); };
+
+  // ---------- Инициализация мини‑карты при открытии формы ----------
+  useEffect(() => {
+    if (showAddForm && mapContainerRef.current && !mapRef.current) {
+      const container = mapContainerRef.current;
+
+      const map = L.map(container, {
+        center: [53.9000, 27.5667],
+        zoom: 12,
+        maxBounds: MINSK_BOUNDS,
+        maxBoundsViscosity: 1.0, // полностью запрещает выход за границы
+      });
+
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>',
+        subdomains: 'abcd',
+        maxZoom: 19,
+      }).addTo(map);
+
+      const initialLat = parseFloat(newCar.locationX) || 53.9;
+      const initialLng = parseFloat(newCar.locationY) || 27.5667;
+
+      const marker = L.marker([initialLat, initialLng], { draggable: true }).addTo(map);
+
+      // Возвращаем маркер в границы при перетаскивании
+      marker.on('drag', (e: L.LeafletEvent) => {
+        const m = e.target as L.Marker;
+        const pos = m.getLatLng();
+        const clamped = {
+          lat: Math.min(MAX_LAT, Math.max(MIN_LAT, pos.lat)),
+          lng: Math.min(MAX_LNG, Math.max(MIN_LNG, pos.lng))
+        };
+        if (clamped.lat !== pos.lat || clamped.lng !== pos.lng) {
+          m.setLatLng(clamped);
+        }
+      });
+
+      marker.on('dragend', () => {
+        const pos = marker.getLatLng();
+        setNewCar(prev => ({
+          ...prev,
+          locationX: pos.lat.toFixed(6),
+          locationY: pos.lng.toFixed(6),
+        }));
+      });
+
+      map.on('click', (e: L.LeafletMouseEvent) => {
+        const { lat, lng } = e.latlng;
+        if (lat < MIN_LAT || lat > MAX_LAT || lng < MIN_LNG || lng > MAX_LNG) return;
+        marker.setLatLng([lat, lng]);
+        setNewCar(prev => ({
+          ...prev,
+          locationX: lat.toFixed(6),
+          locationY: lng.toFixed(6),
+        }));
+      });
+
+      mapRef.current = map;
+      markerRef.current = marker;
+    }
+
+    return () => {
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
+      if (markerRef.current) {
+        markerRef.current = null;
+      }
+    };
+  }, [showAddForm]); // пересоздаём карту при каждом открытии формы
+
+  // ---------- Заправка автомобиля ----------
+  const handleRefuel = async (carId: number) => {
+    setActionLoading(carId);
+    try {
+      const res = await fetch(`${BASE_URL}/api/cars/${carId}/refuel`, {
+        method: 'PUT',
+        headers,
+      });
+      if (!res.ok) throw new Error('Не удалось заправить автомобиль');
+      setCars(prev =>
+          prev.map(c => (c.carId === carId ? { ...c, fuelLevel: 100 } : c))
+      );
+      showSuccess('Автомобиль заправлен до 100%');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Ошибка заправки');
+    } finally {
+      setActionLoading(null);
+    }
+  };
 
   const fetchCars = async () => {
     setLoading(true);
@@ -194,6 +303,12 @@ const AdminManagementPage: React.FC = () => {
 
   const handleAddCar = async (e: React.FormEvent) => {
     e.preventDefault();
+    const lat = parseFloat(newCar.locationX);
+    const lng = parseFloat(newCar.locationY);
+    if (lat < MIN_LAT || lat > MAX_LAT || lng < MIN_LNG || lng > MAX_LNG) {
+      setError('Координаты должны находиться в пределах Минска.');
+      return;
+    }
     setAddLoading(true);
     setError('');
     try {
@@ -203,8 +318,8 @@ const AdminManagementPage: React.FC = () => {
         body: JSON.stringify({
           ...newCar,
           year: parseInt(newCar.year),
-          locationX: parseFloat(newCar.locationX),
-          locationY: parseFloat(newCar.locationY),
+          locationX: lat,
+          locationY: lng,
           carModelId: parseInt(newCar.carModelId)
         })
       });
@@ -212,7 +327,11 @@ const AdminManagementPage: React.FC = () => {
       const added: CarDto = await res.json();
       setCars(prev => [added, ...prev]);
       setShowAddForm(false);
-      setNewCar({ vinNumber: '', color: '', year: new Date().getFullYear().toString(), locationX: '55.7558', locationY: '37.6173', description: '', photoUrl: '', carModelId: '' });
+      setNewCar({
+        vinNumber: '', color: '', year: new Date().getFullYear().toString(),
+        locationX: '53.9000', locationY: '27.5667',
+        description: '', photoUrl: '', carModelId: ''
+      });
       showSuccess('Автомобиль успешно добавлен!');
     } catch (err) { setError(err instanceof Error ? err.message : 'Не удалось добавить автомобиль'); }
     finally { setAddLoading(false); }
@@ -273,8 +392,8 @@ const AdminManagementPage: React.FC = () => {
 
   const filtered = filterStatus === 'ALL' ? cars : cars.filter(c => c.carStatus === filterStatus);
   const verificationRequests = users.filter(u =>
-    !!u.credentials &&
-    !(u.credentials?.verified ?? u.verified)
+      !!u.credentials &&
+      !(u.credentials?.verified ?? u.verified)
   );
 
   return (
@@ -287,9 +406,9 @@ const AdminManagementPage: React.FC = () => {
           <div className="mgmt-header-actions">
             <button className="mgmt-refresh-btn" onClick={() => { fetchCars(); fetchReviews(); fetchStats(); }}>↻ Обновить</button>
             {canAddCars && (
-              <button className="mgmt-add-btn" onClick={() => setShowAddForm(!showAddForm)}>
-                {showAddForm ? '✕ Отмена' : '+ Добавить авто'}
-              </button>
+                <button className="mgmt-add-btn" onClick={() => setShowAddForm(!showAddForm)}>
+                  {showAddForm ? '✕ Отмена' : '+ Добавить авто'}
+                </button>
             )}
           </div>
         </div>
@@ -299,7 +418,7 @@ const AdminManagementPage: React.FC = () => {
           <button className={`mgmt-filter-btn ${activeTab === 'cars' ? 'active' : ''}`} onClick={() => setActiveTab('cars')}>Автопарк</button>
           <button className={`mgmt-filter-btn ${activeTab === 'reviews' ? 'active' : ''}`} onClick={() => setActiveTab('reviews')}>Отзывы</button>
           {canVerify && (
-            <button className={`mgmt-filter-btn ${activeTab === 'verification' ? 'active' : ''}`} onClick={() => setActiveTab('verification')}>Верификация</button>
+              <button className={`mgmt-filter-btn ${activeTab === 'verification' ? 'active' : ''}`} onClick={() => setActiveTab('verification')}>Верификация</button>
           )}
           <button className={`mgmt-filter-btn ${activeTab === 'stats' ? 'active' : ''}`} onClick={() => setActiveTab('stats')}>Статистика</button>
         </div>
@@ -336,14 +455,17 @@ const AdminManagementPage: React.FC = () => {
                     <label>Год *</label>
                     <input type="number" value={newCar.year} onChange={e => setNewCar(p => ({ ...p, year: e.target.value }))} required className="mgmt-input" min="2000" max={new Date().getFullYear() + 1} />
                   </div>
-                  <div className="mgmt-field">
-                    <label>Широта (locationX)</label>
-                    <input type="number" step="0.0001" value={newCar.locationX} onChange={e => setNewCar(p => ({ ...p, locationX: e.target.value }))} className="mgmt-input" />
+
+                  {/* Вместо полей широты/долготы — карта */}
+                  <div className="mgmt-field mgmt-field-full">
+                    <label>Местоположение (кликните по карте)</label>
+                    <div ref={mapContainerRef} style={{ height: '300px', width: '100%', borderRadius: '8px', overflow: 'hidden', border: '1px solid #d1d5db' }} />
+                    <div style={{ display: 'flex', gap: '10px', marginTop: '8px', fontSize: '0.85rem', color: '#6b7280' }}>
+                      <span>Широта: {parseFloat(newCar.locationX).toFixed(5)}</span>
+                      <span>Долгота: {parseFloat(newCar.locationY).toFixed(5)}</span>
+                    </div>
                   </div>
-                  <div className="mgmt-field">
-                    <label>Долгота (locationY)</label>
-                    <input type="number" step="0.0001" value={newCar.locationY} onChange={e => setNewCar(p => ({ ...p, locationY: e.target.value }))} className="mgmt-input" />
-                  </div>
+
                   <div className="mgmt-field mgmt-field-full">
                     <label>URL фото</label>
                     <input type="text" value={newCar.photoUrl} onChange={e => setNewCar(p => ({ ...p, photoUrl: e.target.value }))} className="mgmt-input" placeholder="https://..." />
@@ -364,18 +486,18 @@ const AdminManagementPage: React.FC = () => {
 
         {/* Cars filter */}
         {activeTab === 'cars' && (
-        <div className="mgmt-filter-bar">
-          <span className="mgmt-filter-label">Фильтр:</span>
-          {['ALL', ...STATUS_OPTIONS].map(s => (
-              <button
-                  key={s}
-                  className={`mgmt-filter-btn ${filterStatus === s ? 'active' : ''}`}
-                  onClick={() => setFilterStatus(s)}
-              >
-                {s === 'ALL' ? `Все (${cars.length})` : `${STATUS_LABELS[s]} (${cars.filter(c => c.carStatus === s).length})`}
-              </button>
-          ))}
-        </div>
+            <div className="mgmt-filter-bar">
+              <span className="mgmt-filter-label">Фильтр:</span>
+              {['ALL', ...STATUS_OPTIONS].map(s => (
+                  <button
+                      key={s}
+                      className={`mgmt-filter-btn ${filterStatus === s ? 'active' : ''}`}
+                      onClick={() => setFilterStatus(s)}
+                  >
+                    {s === 'ALL' ? `Все (${cars.length})` : `${STATUS_LABELS[s]} (${cars.filter(c => c.carStatus === s).length})`}
+                  </button>
+              ))}
+            </div>
         )}
 
         {activeTab === 'cars' && (loading ? (
@@ -434,6 +556,15 @@ const AdminManagementPage: React.FC = () => {
                           disabled={actionLoading === car.carId}
                       >
                         {actionLoading === car.carId ? '...' : '🗑'}
+                      </button>
+                      {/* Кнопка заправки */}
+                      <button
+                          className="mgmt-refuel-btn"
+                          onClick={() => handleRefuel(car.carId)}
+                          disabled={actionLoading === car.carId}
+                          title="Заправить до 100%"
+                      >
+                        {actionLoading === car.carId ? '⏳' : '⛽'}
                       </button>
                     </div>
                   </div>
@@ -528,9 +659,9 @@ const AdminManagementPage: React.FC = () => {
                       <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                       <XAxis dataKey="name" tick={{ fill: '#6b7280', fontSize: 12 }} />
                       <YAxis tick={{ fill: '#6b7280', fontSize: 12 }} />
-                      <Tooltip 
-                        contentStyle={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8 }}
-                        labelStyle={{ color: '#111827' }}
+                      <Tooltip
+                          contentStyle={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8 }}
+                          labelStyle={{ color: '#111827' }}
                       />
                       <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                         <Cell fill="#3b82f6" />
@@ -547,20 +678,20 @@ const AdminManagementPage: React.FC = () => {
                   <ResponsiveContainer width="100%" height={250}>
                     <PieChart>
                       <Pie
-                        data={[
-                          { name: 'Доступна', value: cars.filter(c => c.carStatus === 'AVAILABLE').length, color: '#10b981' },
-                          { name: 'Забронирована', value: cars.filter(c => c.carStatus === 'BOOKED').length, color: '#f59e0b' },
-                          { name: 'В поездке', value: cars.filter(c => c.carStatus === 'IN_USE').length, color: '#3b82f6' },
-                          { name: 'Не в строю', value: cars.filter(c => c.carStatus === 'OUT_OF_SERVICE').length, color: '#ef4444' },
-                        ].filter(d => d.value > 0)}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={50}
-                        outerRadius={80}
-                        paddingAngle={5}
-                        dataKey="value"
-                        label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}
-                        labelLine={false}
+                          data={[
+                            { name: 'Доступна', value: cars.filter(c => c.carStatus === 'AVAILABLE').length, color: '#10b981' },
+                            { name: 'Забронирована', value: cars.filter(c => c.carStatus === 'BOOKED').length, color: '#f59e0b' },
+                            { name: 'В поездке', value: cars.filter(c => c.carStatus === 'IN_USE').length, color: '#3b82f6' },
+                            { name: 'Не в строю', value: cars.filter(c => c.carStatus === 'OUT_OF_SERVICE').length, color: '#ef4444' },
+                          ].filter(d => d.value > 0)}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={50}
+                          outerRadius={80}
+                          paddingAngle={5}
+                          dataKey="value"
+                          label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}
+                          labelLine={false}
                       >
                         {[
                           { color: '#10b981' },
@@ -568,11 +699,11 @@ const AdminManagementPage: React.FC = () => {
                           { color: '#3b82f6' },
                           { color: '#ef4444' },
                         ].map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
+                            <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                       </Pie>
-                      <Tooltip 
-                        contentStyle={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8 }}
+                      <Tooltip
+                          contentStyle={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8 }}
                       />
                       <Legend />
                     </PieChart>
@@ -594,8 +725,8 @@ const AdminManagementPage: React.FC = () => {
                       <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                       <XAxis dataKey="name" tick={{ fill: '#6b7280', fontSize: 12 }} />
                       <YAxis tick={{ fill: '#6b7280', fontSize: 12 }} />
-                      <Tooltip 
-                        contentStyle={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8 }}
+                      <Tooltip
+                          contentStyle={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8 }}
                       />
                       <Bar dataKey="value" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
                     </BarChart>
@@ -616,8 +747,8 @@ const AdminManagementPage: React.FC = () => {
                       <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                       <XAxis dataKey="name" tick={{ fill: '#6b7280', fontSize: 12 }} />
                       <YAxis tick={{ fill: '#6b7280', fontSize: 12 }} />
-                      <Tooltip 
-                        contentStyle={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8 }}
+                      <Tooltip
+                          contentStyle={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8 }}
                       />
                       <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                         <Cell fill="#10b981" />
@@ -646,8 +777,8 @@ const AdminManagementPage: React.FC = () => {
                       <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                       <XAxis dataKey="name" tick={{ fill: '#6b7280', fontSize: 12 }} />
                       <YAxis tick={{ fill: '#6b7280', fontSize: 12 }} />
-                      <Tooltip 
-                        contentStyle={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8 }}
+                      <Tooltip
+                          contentStyle={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8 }}
                       />
                       <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                         <Cell fill="#ef4444" />
@@ -663,21 +794,21 @@ const AdminManagementPage: React.FC = () => {
                 <div className="mgmt-chart-card">
                   <h3 className="mgmt-chart-title">Марки автомобилей</h3>
                   <ResponsiveContainer width="100%" height={250}>
-                    <BarChart 
-                      data={Object.entries(
-                        cars.reduce((acc, car) => {
-                          const brand = car.carModelDto?.carManufactureDto?.name || 'Неизвестно';
-                          acc[brand] = (acc[brand] || 0) + 1;
-                          return acc;
-                        }, {} as Record<string, number>)
-                      ).slice(0, 6).map(([name, value]) => ({ name, value }))}
-                      layout="vertical"
+                    <BarChart
+                        data={Object.entries(
+                            cars.reduce((acc, car) => {
+                              const brand = car.carModelDto?.carManufactureDto?.name || 'Неизвестно';
+                              acc[brand] = (acc[brand] || 0) + 1;
+                              return acc;
+                            }, {} as Record<string, number>)
+                        ).slice(0, 6).map(([name, value]) => ({ name, value }))}
+                        layout="vertical"
                     >
                       <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                       <XAxis type="number" tick={{ fill: '#6b7280', fontSize: 12 }} />
                       <YAxis type="category" dataKey="name" tick={{ fill: '#6b7280', fontSize: 11 }} width={80} />
-                      <Tooltip 
-                        contentStyle={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8 }}
+                      <Tooltip
+                          contentStyle={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8 }}
                       />
                       <Bar dataKey="value" fill="#3b82f6" radius={[0, 4, 4, 0]} />
                     </BarChart>
