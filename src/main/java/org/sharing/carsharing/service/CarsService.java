@@ -1,7 +1,11 @@
 package org.sharing.carsharing.service;
 
 import org.sharing.carsharing.dto.carDto.request.CarAddRequest;
+import org.sharing.carsharing.dto.carDto.request.CarManufactureAddRequest;
+import org.sharing.carsharing.dto.carDto.request.CarModelAddRequest;
 import org.sharing.carsharing.dto.carDto.CarDto;
+import org.sharing.carsharing.dto.carDto.CarManufactureDto;
+import org.sharing.carsharing.dto.carDto.CarModelDto;
 import org.sharing.carsharing.dto.carDto.CarModelOptionDto;
 import org.sharing.carsharing.model.enums.CarStatus;
 
@@ -15,6 +19,10 @@ public interface CarsService {
     CarDto updateCarStatus(Long id, CarStatus status);
     
     List<CarModelOptionDto> getCarModels();
+    CarModelDto addCarModel(CarModelAddRequest carModelAddRequest);
+    CarManufactureDto addCarManufacture(CarManufactureAddRequest carManufactureAddRequest);
+    List<CarManufactureDto> getAllCarManufactures();
 
     CarDto refuelCar(Long id);
+
 }

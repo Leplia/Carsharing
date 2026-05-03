@@ -2,7 +2,11 @@ package org.sharing.carsharing.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.sharing.carsharing.dto.carDto.request.CarAddRequest;
+import org.sharing.carsharing.dto.carDto.request.CarManufactureAddRequest;
+import org.sharing.carsharing.dto.carDto.request.CarModelAddRequest;
 import org.sharing.carsharing.dto.carDto.CarDto;
+import org.sharing.carsharing.dto.carDto.CarManufactureDto;
+import org.sharing.carsharing.dto.carDto.CarModelDto;
 import org.sharing.carsharing.dto.carDto.CarModelOptionDto;
 import org.sharing.carsharing.dto.carDto.request.CarDeleteRequest;
 import org.sharing.carsharing.model.enums.CarStatus;
@@ -36,6 +40,11 @@ public class CarsController {
         return ResponseEntity.ok(carsService.getCarModels());
     }
 
+    @GetMapping("/manufactures")
+    public ResponseEntity<List<CarManufactureDto>> getAllCarManufactures() {
+        return ResponseEntity.ok(carsService.getAllCarManufactures());
+    }
+
     @PutMapping("/{id}/refuel")
     public ResponseEntity<CarDto> refuelCar(@PathVariable Long id) {
         CarDto updatedCar = carsService.refuelCar(id);
@@ -48,6 +57,22 @@ public class CarsController {
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
         adminAccessService.requireAnyRole(authHeader, Role.ADMIN);
         return ResponseEntity.ok(carsService.addCar(carAddRequest));
+    }
+
+    @PostMapping("/addCarModel")
+    public ResponseEntity<CarModelDto> addCarModel(
+            @RequestBody CarModelAddRequest carModelAddRequest,
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        adminAccessService.requireAnyRole(authHeader, Role.ADMIN);
+        return ResponseEntity.ok(carsService.addCarModel(carModelAddRequest));
+    }
+
+    @PostMapping("/addCarManufacture")
+    public ResponseEntity<CarManufactureDto> addCarManufacture(
+            @RequestBody CarManufactureAddRequest carManufactureAddRequest,
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        adminAccessService.requireAnyRole(authHeader, Role.ADMIN);
+        return ResponseEntity.ok(carsService.addCarManufacture(carManufactureAddRequest));
     }
 
     @DeleteMapping("/deleteCar/{id}")

@@ -2,12 +2,20 @@ package org.sharing.carsharing.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.sharing.carsharing.dto.carDto.request.CarAddRequest;
+import org.sharing.carsharing.dto.carDto.request.CarManufactureAddRequest;
+import org.sharing.carsharing.dto.carDto.request.CarModelAddRequest;
 import org.sharing.carsharing.dto.carDto.CarDto;
+import org.sharing.carsharing.dto.carDto.CarManufactureDto;
+import org.sharing.carsharing.dto.carDto.CarModelDto;
 import org.sharing.carsharing.dto.carDto.CarModelOptionDto;
 import org.sharing.carsharing.mapper.car.CarMapper;
+import org.sharing.carsharing.mapper.car.CarManufactureMapper;
+import org.sharing.carsharing.mapper.car.CarModelMapper;
 import org.sharing.carsharing.model.Car;
+import org.sharing.carsharing.model.CarManufacture;
 import org.sharing.carsharing.model.CarModel;
 import org.sharing.carsharing.model.enums.CarStatus;
+import org.sharing.carsharing.repository.CarManufactureRepository;
 import org.sharing.carsharing.repository.CarModelRepository;
 import org.sharing.carsharing.repository.CarsRepository;
 import org.sharing.carsharing.service.CarsService;
@@ -20,7 +28,10 @@ import java.util.List;
 public class CarsServiceImpl implements CarsService {
     private final CarsRepository carsRepository;
     private final CarModelRepository carModelRepository;
+    private final CarManufactureRepository carManufactureRepository;
     private final CarMapper carMapper;
+    private final CarModelMapper carModelMapper;
+    private final CarManufactureMapper carManufactureMapper;
 
     @Override
     public List<CarDto> getAvailableCars() {
@@ -79,6 +90,40 @@ public class CarsServiceImpl implements CarsService {
                     dto.setCarManufactureName(model.getCarManufacture().getName());
                     return dto;
                 })
+                .toList();
+    }
+
+    @Override
+    public CarModelDto addCarModel(CarModelAddRequest carModelAddRequest) {
+        CarManufacture carManufacture = carManufactureRepository.findById(carModelAddRequest.getCarManufactureId())
+                .orElseThrow(() -> new RuntimeException("CarManufacture not found with id: " + carModelAddRequest.getCarManufactureId()));
+        
+        CarModel carModel = new CarModel();
+        carModel.setName(carModelAddRequest.getName());
+        carModel.setTransmission(carModelAddRequest.getTransmission());
+        carModel.setSeats(carModelAddRequest.getSeats());
+        carModel.setBodyType(carModelAddRequest.getBodyType());
+        carModel.setCoefficient(carModelAddRequest.getCoefficient());
+        carModel.setCarManufacture(carManufacture);
+        
+        return carModelMapper.toDto(carModelRepository.save(carModel));
+    }
+
+    @Override
+    public CarManufactureDto addCarManufacture(CarManufactureAddRequest carManufactureAddRequest) {
+        CarManufacture carManufacture = new CarManufacture();
+        carManufacture.setName(carManufactureAddRequest.getName());
+        carManufacture.setCountry(carManufactureAddRequest.getCountry());
+        carManufacture.setBadgeUrl(carManufactureAddRequest.getBadgeUrl());
+        
+        return carManufactureMapper.toDto(carManufactureRepository.save(carManufacture));
+    }
+
+    @Override
+    public List<CarManufactureDto> getAllCarManufactures() {
+        return carManufactureRepository.findAll()
+                .stream()
+                .map(carManufactureMapper::toDto)
                 .toList();
     }
 

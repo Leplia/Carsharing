@@ -18,6 +18,13 @@ interface CarModelOption {
   carManufactureName: string;
 }
 
+interface CarManufactureDto {
+  modelId: number;
+  name: string;
+  country: string;
+  badgeUrl: string;
+}
+
 interface CarDto {
   carId: number;
   photoUrl: string;
@@ -114,6 +121,7 @@ const AdminManagementPage: React.FC = () => {
     fetchReviews();
     fetchStats();
     fetchUsers();
+    fetchManufactures();
   }, [user, navigate]);
 
   const [newCar, setNewCar] = useState({
@@ -121,6 +129,16 @@ const AdminManagementPage: React.FC = () => {
     locationX: '53.9000',   // Минск центр по умолчанию
     locationY: '27.5667',
     description: '', photoUrl: '', carModelId: ''
+  });
+
+  const [showAddManufactureForm, setShowAddManufactureForm] = useState(false);
+  const [showAddModelForm, setShowAddModelForm] = useState(false);
+  const [manufactures, setManufactures] = useState<CarManufactureDto[]>([]);
+  const [newManufacture, setNewManufacture] = useState({
+    name: '', country: '', badgeUrl: ''
+  });
+  const [newModel, setNewModel] = useState({
+    name: '', transmission: 'AUTOMATIC', seats: 5, bodyType: 'SEDAN', coefficient: 1.0, carManufactureId: ''
   });
 
   const token = authApi.getAccessToken();
@@ -248,6 +266,63 @@ const AdminManagementPage: React.FC = () => {
       if (!res.ok) throw new Error(await parseError(res, 'Не удалось загрузить модели'));
       setModels(await res.json());
     } catch (err) { console.error('fetchModels failed', err); }
+  };
+
+  const fetchManufactures = async () => {
+    try {
+      const res = await fetch(`${BASE_URL}/api/cars/manufactures`, { headers });
+      if (!res.ok) throw new Error(await parseError(res, 'Не удалось загрузить производителей'));
+      setManufactures(await res.json());
+    } catch (err) { console.error('fetchManufactures failed', err); }
+  };
+
+  const handleAddManufacture = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAddLoading(true);
+    setError('');
+    try {
+      const res = await fetch(`${BASE_URL}/api/cars/addCarManufacture`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(newManufacture)
+      });
+      if (!res.ok) throw new Error(await parseError(res, 'Не удалось добавить производителя'));
+      const added: CarManufactureDto = await res.json();
+      setManufactures(prev => [added, ...prev]);
+      setShowAddManufactureForm(false);
+      setNewManufacture({ name: '', country: '', badgeUrl: '' });
+      showSuccess('Производитель успешно добавлен!');
+      fetchManufactures();
+    } catch (err) { setError(err instanceof Error ? err.message : 'Не удалось добавить производителя'); }
+    finally { setAddLoading(false); }
+  };
+
+  const handleAddModel = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAddLoading(true);
+    setError('');
+    try {
+      const res = await fetch(`${BASE_URL}/api/cars/addCarModel`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          name: newModel.name,
+          transmission: newModel.transmission,
+          seats: parseInt(newModel.seats.toString()),
+          bodyType: newModel.bodyType,
+          coefficient: parseFloat(newModel.coefficient.toString()),
+          carManufactureId: parseInt(newModel.carManufactureId)
+        })
+      });
+      if (!res.ok) throw new Error(await parseError(res, 'Не удалось добавить модель'));
+      showSuccess('Модель успешно добавлена!');
+      setShowAddModelForm(false);
+      setNewModel({
+        name: '', transmission: 'AUTOMATIC', seats: 5, bodyType: 'SEDAN', coefficient: 1.0, carManufactureId: ''
+      });
+      fetchModels();
+    } catch (err) { setError(err instanceof Error ? err.message : 'Не удалось добавить модель'); }
+    finally { setAddLoading(false); }
   };
 
   const fetchReviews = async () => {
@@ -404,11 +479,19 @@ const AdminManagementPage: React.FC = () => {
             <p>Всего машин: {cars.length} | Доступно: {cars.filter(c => c.carStatus === 'AVAILABLE').length}</p>
           </div>
           <div className="mgmt-header-actions">
-            <button className="mgmt-refresh-btn" onClick={() => { fetchCars(); fetchReviews(); fetchStats(); }}>↻ Обновить</button>
+            <button className="mgmt-refresh-btn" onClick={() => { fetchCars(); fetchReviews(); fetchStats(); fetchModels(); fetchManufactures(); }}>↻ Обновить</button>
             {canAddCars && (
-                <button className="mgmt-add-btn" onClick={() => setShowAddForm(!showAddForm)}>
-                  {showAddForm ? '✕ Отмена' : '+ Добавить авто'}
-                </button>
+                <>
+                  <button className="mgmt-add-btn" onClick={() => setShowAddForm(!showAddForm)}>
+                    {showAddForm ? '✕ Отмена' : '+ Добавить авто'}
+                  </button>
+                  <button className="mgmt-add-btn" onClick={() => setShowAddManufactureForm(!showAddManufactureForm)}>
+                    {showAddManufactureForm ? '✕ Отмена' : '+ Производитель'}
+                  </button>
+                  <button className="mgmt-add-btn" onClick={() => setShowAddModelForm(!showAddModelForm)}>
+                    {showAddModelForm ? '✕ Отмена' : '+ Модель'}
+                  </button>
+                </>
             )}
           </div>
         </div>
@@ -478,6 +561,93 @@ const AdminManagementPage: React.FC = () => {
                 <div className="mgmt-form-actions">
                   <button type="submit" className="mgmt-submit-btn" disabled={addLoading}>
                     {addLoading ? 'Добавление...' : 'Добавить автомобиль'}
+                  </button>
+                </div>
+              </form>
+            </div>
+        )}
+
+        {/* Add manufacture form */}
+        {activeTab === 'cars' && canAddCars && showAddManufactureForm && (
+            <div className="mgmt-add-form-card">
+              <h2>Добавить нового производителя</h2>
+              <form onSubmit={handleAddManufacture} className="mgmt-form">
+                <div className="mgmt-form-grid">
+                  <div className="mgmt-field">
+                    <label>Название производителя *</label>
+                    <input type="text" value={newManufacture.name} onChange={e => setNewManufacture(p => ({ ...p, name: e.target.value }))} required className="mgmt-input" placeholder="Toyota" />
+                  </div>
+                  <div className="mgmt-field">
+                    <label>Страна *</label>
+                    <input type="text" value={newManufacture.country} onChange={e => setNewManufacture(p => ({ ...p, country: e.target.value }))} required className="mgmt-input" placeholder="Япония" />
+                  </div>
+                  <div className="mgmt-field mgmt-field-full">
+                    <label>URL логотипа</label>
+                    <input type="text" value={newManufacture.badgeUrl} onChange={e => setNewManufacture(p => ({ ...p, badgeUrl: e.target.value }))} className="mgmt-input" placeholder="https://..." />
+                  </div>
+                </div>
+                <div className="mgmt-form-actions">
+                  <button type="submit" className="mgmt-submit-btn" disabled={addLoading}>
+                    {addLoading ? 'Добавление...' : 'Добавить производителя'}
+                  </button>
+                </div>
+              </form>
+            </div>
+        )}
+
+        {/* Add model form */}
+        {activeTab === 'cars' && canAddCars && showAddModelForm && (
+            <div className="mgmt-add-form-card">
+              <h2>Добавить новую модель</h2>
+              <form onSubmit={handleAddModel} className="mgmt-form">
+                <div className="mgmt-form-grid">
+                  <div className="mgmt-field">
+                    <label>Название модели *</label>
+                    <input type="text" value={newModel.name} onChange={e => setNewModel(p => ({ ...p, name: e.target.value }))} required className="mgmt-input" placeholder="Camry" />
+                  </div>
+                  <div className="mgmt-field">
+                    <label>Производитель *</label>
+                    <select value={newModel.carManufactureId} onChange={e => setNewModel(p => ({ ...p, carManufactureId: e.target.value }))} required className="mgmt-select">
+                      <option value="">Выберите производителя...</option>
+                      {manufactures.map(m => (
+                          <option key={m.modelId} value={m.modelId}>
+                            {m.name} ({m.country})
+                          </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="mgmt-field">
+                    <label>Коробка передач *</label>
+                    <select value={newModel.transmission} onChange={e => setNewModel(p => ({ ...p, transmission: e.target.value }))} required className="mgmt-select">
+                      <option value="AUTOMATIC">Автоматическая</option>
+                      <option value="MANUAL">Механическая</option>
+                    </select>
+                  </div>
+                  <div className="mgmt-field">
+                    <label>Количество мест *</label>
+                    <input type="number" value={newModel.seats} onChange={e => setNewModel(p => ({ ...p, seats: parseInt(e.target.value) }))} required className="mgmt-input" min="2" max="9" />
+                  </div>
+                  <div className="mgmt-field">
+                    <label>Тип кузова *</label>
+                    <select value={newModel.bodyType} onChange={e => setNewModel(p => ({ ...p, bodyType: e.target.value }))} required className="mgmt-select">
+                      <option value="SEDAN">Седан</option>
+                      <option value="SUV">Внедорожник</option>
+                      <option value="HATCHBACK">Хэтчбек</option>
+                      <option value="COUPE">Купе</option>
+                      <option value="CONVERTIBLE">Кабриолет</option>
+                      <option value="WAGON">Универсал</option>
+                      <option value="MINIVAN">Минивэн</option>
+                      <option value="PICKUP">Пикап</option>
+                    </select>
+                  </div>
+                  <div className="mgmt-field">
+                    <label>Коэффициент стоимости *</label>
+                    <input type="number" step="0.1" value={newModel.coefficient} onChange={e => setNewModel(p => ({ ...p, coefficient: parseFloat(e.target.value) }))} required className="mgmt-input" min="0.5" max="5.0" />
+                  </div>
+                </div>
+                <div className="mgmt-form-actions">
+                  <button type="submit" className="mgmt-submit-btn" disabled={addLoading}>
+                    {addLoading ? 'Добавление...' : 'Добавить модель'}
                   </button>
                 </div>
               </form>
