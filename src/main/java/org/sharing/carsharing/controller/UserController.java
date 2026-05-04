@@ -2,7 +2,6 @@ package org.sharing.carsharing.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.sharing.carsharing.dto.*;
-import org.sharing.carsharing.model.User;
 import org.sharing.carsharing.model.enums.Role;
 import org.sharing.carsharing.service.AdminAccessService;
 import org.sharing.carsharing.service.UserService;
@@ -20,20 +19,17 @@ public class UserController {
 
     @PutMapping("/updateUser/{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserUpdateRequest userUpdateRequest) {
-        UserDto userDto=userService.updateUser(id, userUpdateRequest);
-        return ResponseEntity.ok(userDto);
+        return ResponseEntity.ok(userService.updateUser(id, userUpdateRequest));
     }
 
     @GetMapping("/getAllUserData/{id}")
     public ResponseEntity<UserDto> getAllUserData(@PathVariable Long id) {
-        UserDto userDto=userService.getAllUserData(id);
-        return ResponseEntity.ok(userDto);
+        return ResponseEntity.ok(userService.getAllUserData(id));
     }
 
     @PutMapping("/blockUser/{id}")
     public ResponseEntity<UserDto> blockUser(@PathVariable Long id) {
-        UserDto userDto=userService.blockUser(id);
-        return ResponseEntity.ok(userDto);
+        return ResponseEntity.ok(userService.blockUser(id));
     }
 
     @PutMapping("/setUserRole/{id}")
@@ -42,26 +38,22 @@ public class UserController {
             @RequestBody UserRoleRequest userRoleRequest,
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
         adminAccessService.requireAnyRole(authHeader, Role.SISADMIN);
-        UserDto userDto=userService.setUserRole(id, userRoleRequest);
-        return ResponseEntity.ok(userDto);
+        return ResponseEntity.ok(userService.setUserRole(id, userRoleRequest));
     }
 
     @GetMapping("/getAllUsers")
     public ResponseEntity<List<UserDto>> getAllUsers() {
-        List<UserDto> users=userService.getAllUsers();
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @PutMapping("/changeRating/{id}")
     public ResponseEntity<UserDto> changeRating(@PathVariable Long id, UserRatingEditRequest userRatingEditRequest) {
-        UserDto userDto=userService.changeRating(id, userRatingEditRequest);
-        return ResponseEntity.ok(userDto);
+        return ResponseEntity.ok(userService.changeRating(id, userRatingEditRequest));
     }
 
     @PostMapping("/addCredentials/{id}")
     public ResponseEntity<UserCredentialsDto> addCredentials(@PathVariable Long id, @RequestBody UserCredentialsAddRequest userCredentialsAddRequest) {
-        UserCredentialsDto userCredentialsDto=userService.addCredentials(id,userCredentialsAddRequest);
-        return ResponseEntity.ok(userCredentialsDto);
+        return ResponseEntity.ok(userService.addCredentials(id, userCredentialsAddRequest));
     }
 
     @PutMapping("/verifyUser/{id}")
@@ -70,8 +62,6 @@ public class UserController {
             @RequestBody UserVerificationRequest verificationRequest,
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
         adminAccessService.requireAnyRole(authHeader, Role.ADMIN);
-        UserDto userDto = userService.verifyUser(id, verificationRequest);
-        return ResponseEntity.ok(userDto);
+        return ResponseEntity.ok(userService.verifyUser(id, verificationRequest));
     }
-
 }

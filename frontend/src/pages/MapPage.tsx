@@ -1,4 +1,3 @@
-// frontend/src/pages/MapPage.tsx
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -7,9 +6,9 @@ import 'leaflet-routing-machine';
 import { useAuth } from '../contexts/AuthContext';
 import { BASE_URL } from '../api/auth.api';
 import authApi from '../api/auth.api';
-import { calculateRideCost, RideCostRequest, RideCostResponse } from '../api/ride.api';
+import { calculateRideCost, RideCostRequest } from '../api/ride.api';
 import { createOrder, endOrder, endOrderWithLocation, OrderDto } from '../api/order.api';
-import { bookCar, startRide, endRide, CarDto as ApiCarDto } from '../api/car.api';
+import { bookCar, startRide, endRide } from '../api/car.api';
 import '../styles/pages/MapPage.css';
 
 // ---------- Интерфейсы ----------
@@ -158,7 +157,7 @@ const MapPage: React.FC = () => {
             console.log('Статус загрузки активного заказа:', ordersRes.status);
             if (ordersRes.ok) {
               const activeOrderData = await ordersRes.json();
-              // Бэкенд теперь возвращает null в теле, если активного заказа нет
+              // Бэкенд возвращает null в теле, если активного заказа нет
               if (activeOrderData) {
                 console.log('Активный заказ загружен:', activeOrderData);
                 setActiveOrder(activeOrderData);
@@ -166,15 +165,15 @@ const MapPage: React.FC = () => {
                 console.log('Активный заказ не найден (null в ответе)');
                 setActiveOrder(null);
               }
-            } else if (ordersRes.status === 404) {
-              console.log('Активный заказ не найден (404) - старая версия бэкенда');
-              setActiveOrder(null);
             } else {
-              console.log('Ошибка загрузки активного заказа:', ordersRes.status, ordersRes.statusText);
+              // Если статус не 200-299, значит заказа нет
+              console.log('Активный заказ не найден (статус не ok):', ordersRes.status, ordersRes.statusText);
+              setActiveOrder(null);
             }
           } catch (orderError) {
             // Активного заказа может не быть - это нормально
             console.log('Активный заказ не найден (исключение):', orderError);
+            setActiveOrder(null);
           }
         }
       } catch (error) {
@@ -214,7 +213,10 @@ const MapPage: React.FC = () => {
     return () => {
       if (routingControlRef.current) {
         try {
-          map.removeControl(routingControlRef.current);
+          // Проверяем, существует ли маршрут на карте перед удалением
+          if (map.hasLayer(routingControlRef.current as any)) {
+            map.removeControl(routingControlRef.current);
+          }
         } catch (error) {
           console.error('Ошибка при удалении маршрута при размонтировании:', error);
         }
@@ -222,7 +224,10 @@ const MapPage: React.FC = () => {
       }
       if (destMarkerRef.current) {
         try {
-          map.removeLayer(destMarkerRef.current);
+          // Проверяем, существует ли маркер на карте перед удалением
+          if (map.hasLayer(destMarkerRef.current)) {
+            map.removeLayer(destMarkerRef.current);
+          }
         } catch (error) {
           console.error('Ошибка при удалении маркера назначения:', error);
         }
@@ -364,6 +369,48 @@ const MapPage: React.FC = () => {
 
       console.log('Создание заказа для автомобиля:', selectedCar.carId, 'стоимость:', rideCost);
       
+      // Логирование всех данных для создания Order в БД
+      console.log('====== ДАННЫЕ ДЛЯ СОЗДАНИЯ ORDER В БД ПРИ СОЗДАНИИ ЗАКАЗА ======');
+      console.log('Время:', new Date().toISOString());
+      console.log('Пользователь нажал кнопку "Создать заказ"');
+      
+      console.log('1. Общая информация:');
+      console.log('   - carId:', selectedCar.carId);
+      console.log('   - rideCost:', rideCost);
+      console.log('   - distanceKm:', distanceKm || 'не установлено');
+      console.log('   - destLocation:', destLat && destLng ? { destLat, destLng } : 'не установлено');
+      
+      console.log('2. Данные пользователя:');
+      console.log('   - userId:', user?.userId);
+      console.log('   - email:', user?.email);
+      console.log('   - verified:', user?.verified);
+      
+      console.log('3. Данные автомобиля:');
+      console.log('   - carId:', selectedCar.carId);
+      console.log('   - carStatus:', selectedCar.carStatus);
+      console.log('   - carModel:', selectedCar.carModelDto?.name);
+      console.log('   - carManufacture:', selectedCar.carModelDto?.carManufactureDto?.name);
+      console.log('   - coefficient:', selectedCar.carModelDto?.coefficient);
+      console.log('   - fuelLevel:', selectedCar.fuelLevel, '%');
+      console.log('   - location:', { 
+        lat: selectedCar.locationX, 
+        lng: selectedCar.locationY 
+      });
+      
+      console.log('4. Данные поездки:');
+      console.log('   - distanceKm:', distanceKm || 'не установлено');
+      console.log('   - rideCost:', rideCost);
+      console.log('   - destLocation:', destLat && destLng ? { destLat, destLng } : 'не установлено');
+      
+      console.log('5. Данные для запроса к бэкенду:');
+      console.log('   - endpoint:', '/api/orders/create');
+      console.log('   - method:', 'POST');
+      console.log('   - payload:', { 
+        carId: selectedCar.carId, 
+        price: rideCost 
+      });
+      console.log('====== КОНЕЦ ДАННЫХ ======');
+      
       // 1. Создаем заказ (в бэкенде автомобиль автоматически переводится в статус IN_USE)
       const order = await createOrder(
         { carId: selectedCar.carId, price: rideCost },
@@ -459,13 +506,93 @@ const MapPage: React.FC = () => {
         throw new Error('Требуется авторизация');
       }
 
+      // Логирование всех данных для создания Order в БД при завершении поездки
+      console.log('====== ДАННЫЕ ДЛЯ СОЗДАНИЯ ORDER В БД ПРИ ЗАВЕРШЕНИИ ПОЕЗДКИ ======');
+      console.log('Время:', new Date().toISOString());
+      console.log('Пользователь нажал кнопку "Закончить поездку"');
+      
+      console.log('1. Общая информация:');
+      console.log('   - Есть активный заказ:', !!activeOrder);
+      console.log('   - ID активного заказа:', activeOrder?.orderId);
+      console.log('   - Статус активного заказа:', activeOrder?.status);
+      console.log('   - ID выбранного автомобиля:', selectedCar.carId);
+      console.log('   - Статус автомобиля:', selectedCar.carStatus);
+      console.log('   - Есть точка назначения:', !!(destLat && destLng));
+      console.log('   - Расстояние установлено:', !!distanceKm);
+      
+      console.log('2. Данные пользователя:');
+      console.log('   - userId:', user?.userId);
+      console.log('   - email:', user?.email);
+      console.log('   - verified:', user?.verified);
+      
+      console.log('3. Данные автомобиля:');
+      console.log('   - carId:', selectedCar.carId);
+      console.log('   - carStatus:', selectedCar.carStatus);
+      console.log('   - carModel:', selectedCar.carModelDto?.name);
+      console.log('   - carManufacture:', selectedCar.carModelDto?.carManufactureDto?.name);
+      console.log('   - coefficient:', selectedCar.carModelDto?.coefficient);
+      console.log('   - fuelLevel:', selectedCar.fuelLevel, '%');
+      console.log('   - currentLocation:', { 
+        lat: selectedCar.locationX, 
+        lng: selectedCar.locationY 
+      });
+      
+      console.log('4. Данные маршрута:');
+      console.log('   - destLat:', destLat);
+      console.log('   - destLng:', destLng);
+      console.log('   - distanceKm:', distanceKm);
+      console.log('   - rideCost:', rideCost);
+      
+      console.log('====== КОНЕЦ ОБЩИХ ДАННЫХ ======');
+
       // Если есть активный заказ, используем его для завершения
       if (activeOrder && activeOrder.carId === selectedCar.carId && activeOrder.status === 'STARTED') {
         console.log('Найден активный заказ для автомобиля, завершаем через заказ');
+        
+        // Логирование всех данных для завершения Order в БД
+        console.log('====== ДАННЫЕ ДЛЯ ЗАВЕРШЕНИЯ ORDER В БД ======');
+        console.log('1. Данные пользователя:');
+        console.log('   - userId:', user?.userId);
+        console.log('   - email:', user?.email);
+        
+        console.log('2. Данные автомобиля:');
+        console.log('   - carId:', selectedCar.carId);
+        console.log('   - carStatus:', selectedCar.carStatus);
+        console.log('   - fuelLevel:', selectedCar.fuelLevel, '%');
+        console.log('   - currentLocation:', { 
+          lat: selectedCar.locationX, 
+          lng: selectedCar.locationY 
+        });
+        
+        console.log('3. Данные поездки:');
+        console.log('   - orderId:', activeOrder.orderId);
+        console.log('   - orderStatus:', activeOrder.status);
+        console.log('   - orderPrice:', activeOrder.price);
+        
         if (destLat && destLng && distanceKm) {
           // Рассчитываем расход топлива (20% за 100 км пропорционально)
           const fuelConsumptionPer100Km = 20.0;
           const fuelConsumed = (distanceKm / 100.0) * fuelConsumptionPer100Km;
+          
+          console.log('4. Данные маршрута:');
+          console.log('   - distanceKm:', distanceKm);
+          console.log('   - fuelConsumed:', fuelConsumed.toFixed(2), '%');
+          console.log('   - startLocation:', { 
+            lat: selectedCar.locationX, 
+            lng: selectedCar.locationY 
+          });
+          console.log('   - endLocation:', { destLat, destLng });
+          console.log('   - newFuelLevel:', Math.max(0, selectedCar.fuelLevel - fuelConsumed).toFixed(1), '%');
+          
+          console.log('5. Данные для запроса к бэкенду:');
+          console.log('   - endpoint:', `/api/orders/${activeOrder.orderId}/end`);
+          console.log('   - method:', 'PUT');
+          console.log('   - payload:', { 
+            distanceKm, 
+            spendFuel: fuelConsumed,
+            newLocationX: destLat,
+            newLocationY: destLng
+          });
           
           await endOrderWithLocation(
             activeOrder.orderId,
@@ -478,13 +605,38 @@ const MapPage: React.FC = () => {
             token
           );
         } else {
+          console.log('4. Данные маршрута: НЕТ ДАННЫХ О МАРШРУТЕ');
+          console.log('   - distanceKm: 0');
+          console.log('   - fuelConsumed: 0');
+          
+          console.log('5. Данные для запроса к бэкенду:');
+          console.log('   - endpoint:', `/api/orders/${activeOrder.orderId}/end`);
+          console.log('   - method:', 'PUT');
+          console.log('   - payload:', { distanceKm: 0, spendFuel: 0 });
+          
           await endOrder(activeOrder.orderId, { distanceKm: 0, spendFuel: 0 }, token);
         }
         
+        console.log('====== КОНЕЦ ДАННЫХ ======');
         setActiveOrder(null);
       } else {
         // Если нет активного заказа, просто завершаем поездку через CarsController
         console.log('Активного заказа нет, завершаем поездку через CarsController');
+        
+        // Логирование данных для завершения поездки без заказа
+        console.log('====== ДАННЫЕ ДЛЯ ЗАВЕРШЕНИЯ ПОЕЗДКИ БЕЗ ORDER ======');
+        console.log('1. Данные пользователя:');
+        console.log('   - userId:', user?.userId);
+        console.log('   - email:', user?.email);
+        
+        console.log('2. Данные автомобиля:');
+        console.log('   - carId:', selectedCar.carId);
+        console.log('   - carStatus:', selectedCar.carStatus);
+        console.log('   - fuelLevel:', selectedCar.fuelLevel, '%');
+        console.log('   - currentLocation:', { 
+          lat: selectedCar.locationX, 
+          lng: selectedCar.locationY 
+        });
         
         // Если есть точка назначения, обновляем локацию автомобиля
         if (destLat && destLng && distanceKm) {
@@ -492,6 +644,26 @@ const MapPage: React.FC = () => {
           const fuelConsumptionPer100Km = 20.0;
           const fuelConsumed = (distanceKm / 100.0) * fuelConsumptionPer100Km;
           const newFuelLevel = Math.max(0, selectedCar.fuelLevel - fuelConsumed);
+          
+          console.log('3. Данные маршрута:');
+          console.log('   - distanceKm:', distanceKm);
+          console.log('   - fuelConsumed:', fuelConsumed.toFixed(2), '%');
+          console.log('   - startLocation:', { 
+            lat: selectedCar.locationX, 
+            lng: selectedCar.locationY 
+          });
+          console.log('   - endLocation:', { destLat, destLng });
+          console.log('   - newFuelLevel:', newFuelLevel.toFixed(1), '%');
+          
+          console.log('4. Данные для запроса к бэкенду:');
+          console.log('   - endpoint:', `/api/cars/${selectedCar.carId}/end`);
+          console.log('   - method:', 'PUT');
+          console.log('   - payload: {} (без тела запроса)');
+          console.log('   - обновление на фронтенде:');
+          console.log('     - новый статус: AVAILABLE');
+          console.log('     - новая локация:', { destLat, destLng });
+          console.log('     - новый уровень топлива:', newFuelLevel.toFixed(1), '%');
+          console.log('====== КОНЕЦ ДАННЫХ ======');
           
           // Обновляем автомобиль с новой локацией и топливом
           const updatedCars = cars.map(car => {
@@ -540,10 +712,25 @@ const MapPage: React.FC = () => {
           setDistanceKm(null);
           setRideCost(null);
         } else {
+          console.log('3. Данные маршрута: НЕТ ДАННЫХ О МАРШРУТЕ');
+          console.log('   - distanceKm: неизвестно');
+          console.log('   - fuelConsumed: 0');
+          console.log('   - endLocation: не изменяется');
+          
+          console.log('4. Данные для запроса к бэкенду:');
+          console.log('   - endpoint:', `/api/cars/${selectedCar.carId}/end`);
+          console.log('   - method:', 'PUT');
+          console.log('   - payload: {} (без тела запроса)');
+          console.log('   - обновление на фронтенде:');
+          console.log('     - новый статус: AVAILABLE');
+          console.log('     - локация: не изменяется');
+          console.log('     - уровень топлива: не изменяется');
+          console.log('====== КОНЕЦ ДАННЫХ ======');
+          
           // Просто завершаем поездку без обновления локации
           const updatedCar = await endRide(selectedCar.carId, token);
           
-          // Обновляем список авто��обилей
+          // Обновляем список автомобилей
           const updatedCars = cars.map(car => 
             car.carId === selectedCar.carId 
               ? { ...car, carStatus: 'AVAILABLE' as const }
@@ -586,12 +773,53 @@ const MapPage: React.FC = () => {
       const fuelConsumptionPer100Km = 20.0;
       const fuelConsumed = (distanceKm / 100.0) * fuelConsumptionPer100Km;
       
-      console.log('Завершение заказа:', {
-        orderId: activeOrder.orderId,
-        distanceKm,
-        fuelConsumed,
-        newLocation: { destLat, destLng }
+      // Логирование всех данных для создания Order в БД
+      console.log('====== ДАННЫЕ ДЛЯ СОЗДАНИЯ ORDER В БД ПРИ ЗАВЕРШЕНИИ ЗАКАЗА ======');
+      console.log('Время:', new Date().toISOString());
+      console.log('Пользователь нажал кнопку "Завершить поездку" из панели активного заказа');
+      
+      console.log('1. Общая информация:');
+      console.log('   - orderId:', activeOrder.orderId);
+      console.log('   - orderStatus:', activeOrder.status);
+      console.log('   - carId:', activeOrder.carId);
+      console.log('   - price:', activeOrder.price);
+      console.log('   - distanceKm:', distanceKm);
+      console.log('   - destLat:', destLat);
+      console.log('   - destLng:', destLng);
+      console.log('   - fuelConsumed:', fuelConsumed.toFixed(2), '%');
+      
+      console.log('2. Данные пользователя:');
+      console.log('   - userId:', user?.userId);
+      console.log('   - email:', user?.email);
+      console.log('   - verified:', user?.verified);
+      
+      console.log('3. Данные автомобиля:');
+      console.log('   - carId:', activeOrder.carId);
+      console.log('   - carStatus:', selectedCar?.carStatus || 'не выбран');
+      console.log('   - fuelLevel:', selectedCar?.fuelLevel || 'неизвестно');
+      
+      console.log('3. Данные поездки:');
+      console.log('   - orderId:', activeOrder.orderId);
+      console.log('   - distanceKm:', distanceKm);
+      console.log('   - fuelConsumed:', fuelConsumed.toFixed(2), '%');
+      console.log('   - startLocation:', { 
+        lat: selectedCar?.locationX || 'неизвестно', 
+        lng: selectedCar?.locationY || 'неизвестно' 
       });
+      console.log('   - endLocation:', { destLat, destLng });
+      console.log('   - price:', activeOrder.price);
+      console.log('   - status:', activeOrder.status);
+      
+      console.log('4. Данные для запроса к бэкенду:');
+      console.log('   - endpoint:', `/api/orders/${activeOrder.orderId}/end`);
+      console.log('   - method:', 'PUT');
+      console.log('   - payload:', { 
+        distanceKm, 
+        spendFuel: fuelConsumed,
+        newLocationX: destLat,
+        newLocationY: destLng
+      });
+      console.log('====== КОНЕЦ ДАННЫХ ======');
       
       // Завершаем заказ с обновлением локации и топлива
       const updatedOrder = await endOrderWithLocation(
@@ -674,7 +902,10 @@ const MapPage: React.FC = () => {
     // Удаляем предыдущий маркер назначения
     if (destMarkerRef.current) {
       try {
-        map.removeLayer(destMarkerRef.current);
+        // Проверяем, существует ли маркер на карте перед удалением
+        if (map.hasLayer(destMarkerRef.current)) {
+          map.removeLayer(destMarkerRef.current);
+        }
       } catch (error) {
         console.error('Ошибка при удалении маркера назначения:', error);
       }
@@ -684,7 +915,10 @@ const MapPage: React.FC = () => {
     // Удаляем предыдущий маршрут
     if (routingControlRef.current) {
       try {
-        map.removeControl(routingControlRef.current);
+        // Проверяем, существует ли маршрут на карте перед удалением
+        if (map.hasLayer(routingControlRef.current as any)) {
+          map.removeControl(routingControlRef.current);
+        }
       } catch (error) {
         console.error('Ошибка при удалении предыдущего маршрута:', error);
       }
@@ -889,12 +1123,22 @@ const MapPage: React.FC = () => {
                     onClick={() => {
                       const map = mapRef.current;
                       if (destMarkerRef.current && map) {
-                        map.removeLayer(destMarkerRef.current);
+                        try {
+                          // Проверяем, существует ли маркер на карте перед удалением
+                          if (map.hasLayer(destMarkerRef.current)) {
+                            map.removeLayer(destMarkerRef.current);
+                          }
+                        } catch (error) {
+                          console.error('Ошибка при удалении маркера назначения:', error);
+                        }
                         destMarkerRef.current = null;
                       }
                       if (routingControlRef.current && map) {
                         try {
-                          map.removeControl(routingControlRef.current);
+                          // Проверяем, существует ли маршрут на карте перед удалением
+                          if (map.hasLayer(routingControlRef.current as any)) {
+                            map.removeControl(routingControlRef.current);
+                          }
                         } catch (error) {
                           console.error('Ошибка при удалении маршрута:', error);
                         }
