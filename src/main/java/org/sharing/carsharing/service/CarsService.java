@@ -24,5 +24,10 @@ public interface CarsService {
     List<CarManufactureDto> getAllCarManufactures();
 
     CarDto refuelCar(Long id);
+    
+    // Новые методы для бронирования
+    CarDto bookCar(Long id);
+    CarDto startRide(Long id);
+    CarDto endRide(Long id);
 
 }

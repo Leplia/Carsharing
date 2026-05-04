@@ -135,4 +135,34 @@ public class CarsServiceImpl implements CarsService {
         Car saved = carsRepository.save(car);
         return carMapper.toDto(saved);
     }
+    
+    @Override
+    public CarDto bookCar(Long id) {
+        Car car = carsRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Car not found: " + id));
+        if (car.getCarStatus() != CarStatus.AVAILABLE) {
+            throw new RuntimeException("Car is not available for booking. Current status: " + car.getCarStatus());
+        }
+        car.setCarStatus(CarStatus.BOOKED);
+        return carMapper.toDto(carsRepository.save(car));
+    }
+    
+    @Override
+    public CarDto startRide(Long id) {
+        Car car = carsRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Car not found: " + id));
+        if (car.getCarStatus() != CarStatus.BOOKED) {
+            throw new RuntimeException("Car is not booked. Current status: " + car.getCarStatus());
+        }
+        car.setCarStatus(CarStatus.IN_USE);
+        return carMapper.toDto(carsRepository.save(car));
+    }
+    
+    @Override
+    public CarDto endRide(Long id) {
+        Car car = carsRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Car not found: " + id));
+        car.setCarStatus(CarStatus.AVAILABLE);
+        return carMapper.toDto(carsRepository.save(car));
+    }
 }

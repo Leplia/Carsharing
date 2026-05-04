@@ -130,36 +130,55 @@ const MapPage: React.FC = () => {
     const fetchCarsAndActiveOrder = async () => {
       try {
         const token = authApi.getAccessToken();
+        console.log('Токен при загрузке страницы:', token ? 'есть' : 'нет');
         const headers: Record<string, string> = token
             ? { Authorization: `Bearer ${token}` }
             : {};
+        
+        console.log('Заголовки запроса:', headers);
         
         // Загружаем все автомобили (включая забронированные)
         const carsRes = await fetch(`${BASE_URL}/api/cars/getAllCars`, {
           headers,
         });
+        console.log('Статус загрузки автомобилей:', carsRes.status, carsRes.ok);
         if (carsRes.ok) {
           const carsData = await carsRes.json();
+          console.log('Автомобили загружены:', carsData.length);
           setCars(carsData);
         }
 
         // Если пользователь авторизован, проверяем активный заказ
         if (token && user) {
           try {
+            console.log('Проверка активного заказа для пользователя:', user.userId);
             const ordersRes = await fetch(`${BASE_URL}/api/user/orders/active`, {
               headers,
             });
+            console.log('Статус загрузки активного заказа:', ordersRes.status);
             if (ordersRes.ok) {
               const activeOrderData = await ordersRes.json();
-              setActiveOrder(activeOrderData);
+              // Бэкенд теперь возвращает null в теле, если активного заказа нет
+              if (activeOrderData) {
+                console.log('Активный заказ загружен:', activeOrderData);
+                setActiveOrder(activeOrderData);
+              } else {
+                console.log('Активный заказ не найден (null в ответе)');
+                setActiveOrder(null);
+              }
+            } else if (ordersRes.status === 404) {
+              console.log('Активный заказ не найден (404) - старая версия бэкенда');
+              setActiveOrder(null);
+            } else {
+              console.log('Ошибка загрузки активного заказа:', ordersRes.status, ordersRes.statusText);
             }
           } catch (orderError) {
             // Активного заказа может не быть - это нормально
-            console.log('Активный заказ не найден');
+            console.log('Активный заказ не найден (исключение):', orderError);
           }
         }
-      } catch {
-        // Обработка ошибок
+      } catch (error) {
+        console.error('Ошибка загрузки данных:', error);
       } finally {
         setLoading(false);
       }
@@ -194,14 +213,26 @@ const MapPage: React.FC = () => {
     // Очистка при размонтировании
     return () => {
       if (routingControlRef.current) {
-        map.removeControl(routingControlRef.current);
+        try {
+          map.removeControl(routingControlRef.current);
+        } catch (error) {
+          console.error('Ошибка при удалении маршрута при размонтировании:', error);
+        }
         routingControlRef.current = null;
       }
       if (destMarkerRef.current) {
-        map.removeLayer(destMarkerRef.current);
+        try {
+          map.removeLayer(destMarkerRef.current);
+        } catch (error) {
+          console.error('Ошибка при удалении маркера назначения:', error);
+        }
         destMarkerRef.current = null;
       }
-      map.remove();
+      try {
+        map.remove();
+      } catch (error) {
+        console.error('Ошибка при удалении карты:', error);
+      }
       mapRef.current = null;
     };
   }, [loading]);
@@ -326,19 +357,25 @@ const MapPage: React.FC = () => {
 
     try {
       const token = authApi.getAccessToken();
+      console.log('Токен при создании заказа:', token ? 'есть' : 'нет');
       if (!token) {
         throw new Error('Требуется авторизация');
       }
 
+      console.log('Создание заказа для автомобиля:', selectedCar.carId, 'стоимость:', rideCost);
+      
+      // 1. Создаем заказ (в бэкенде автомобиль автоматически переводится в статус IN_USE)
       const order = await createOrder(
         { carId: selectedCar.carId, price: rideCost },
         token
       );
       
+      console.log('Заказ создан:', order);
+      
       setActiveOrder(order);
       setOrderError(null);
       
-      // Обновляем список автомобилей (автомобиль должен перейти в статус IN_USE)
+      // 2. Обновляем список автомобилей на фронтенде
       const updatedCars = cars.map(car => 
         car.carId === selectedCar.carId 
           ? { ...car, carStatus: 'IN_USE' as const }
@@ -346,9 +383,12 @@ const MapPage: React.FC = () => {
       );
       setCars(updatedCars);
       
-      // Снимаем выделение с автомобиля
+      // 3. Снимаем выделение с автомобиля
       setSelectedCar(null);
+      
+      console.log('Заказ успешно создан, автомобиль переведен в статус IN_USE');
     } catch (error: any) {
+      console.error('Ошибка создания заказа:', error);
       setOrderError(error.message || 'Ошибка создания заказа');
     } finally {
       setOrderLoading(false);
@@ -419,72 +459,107 @@ const MapPage: React.FC = () => {
         throw new Error('Требуется авторизация');
       }
 
-      // Если есть точка назначения, обновляем локацию автомобиля
-      if (destLat && destLng && distanceKm) {
-        // Рассчитываем расход топлива (20% за 100 км пропорционально)
-        const fuelConsumptionPer100Km = 20.0;
-        const fuelConsumed = (distanceKm / 100.0) * fuelConsumptionPer100Km;
-        const newFuelLevel = Math.max(0, selectedCar.fuelLevel - fuelConsumed);
-        
-        // Обновляем автомобиль с новой локацией и топливом
-        const updatedCars = cars.map(car => {
-          if (car.carId === selectedCar.carId) {
-            return { 
-              ...car, 
-              carStatus: 'AVAILABLE' as const,
-              locationX: destLat,
-              locationY: destLng,
-              fuelLevel: parseFloat(newFuelLevel.toFixed(1))
-            };
-          }
-          return car;
-        });
-        setCars(updatedCars);
-        
-        // Обновляем выбранный автомобиль
-        setSelectedCar({ 
-          ...selectedCar, 
-          carStatus: 'AVAILABLE' as const,
-          locationX: destLat,
-          locationY: destLng,
-          fuelLevel: Math.round(newFuelLevel)
-        });
-        
-        // Очищаем маршрут
-        const map = mapRef.current;
-        if (destMarkerRef.current && map) {
-          map.removeLayer(destMarkerRef.current);
-          destMarkerRef.current = null;
+      // Если есть активный заказ, используем его для завершения
+      if (activeOrder && activeOrder.carId === selectedCar.carId && activeOrder.status === 'STARTED') {
+        console.log('Найден активный заказ для автомобиля, завершаем через заказ');
+        if (destLat && destLng && distanceKm) {
+          // Рассчитываем расход топлива (20% за 100 км пропорционально)
+          const fuelConsumptionPer100Km = 20.0;
+          const fuelConsumed = (distanceKm / 100.0) * fuelConsumptionPer100Km;
+          
+          await endOrderWithLocation(
+            activeOrder.orderId,
+            { 
+              distanceKm, 
+              spendFuel: fuelConsumed,
+              newLocationX: destLat,
+              newLocationY: destLng
+            },
+            token
+          );
+        } else {
+          await endOrder(activeOrder.orderId, { distanceKm: 0, spendFuel: 0 }, token);
         }
-        if (routingControlRef.current && map) {
-          map.removeControl(routingControlRef.current);
-          routingControlRef.current = null;
-        }
-        setDestLat(null);
-        setDestLng(null);
-        setDistanceKm(null);
-        setRideCost(null);
+        
+        setActiveOrder(null);
       } else {
-        // Просто завершаем поездку без обновления локации
-        const updatedCar = await endRide(selectedCar.carId, token);
+        // Если нет активного заказа, просто завершаем поездку через CarsController
+        console.log('Активного заказа нет, завершаем поездку через CarsController');
         
-        // Обновляем список автомобилей
-        const updatedCars = cars.map(car => 
-          car.carId === selectedCar.carId 
-            ? { ...car, carStatus: 'AVAILABLE' as const }
-            : car
-        );
-        setCars(updatedCars);
-        
-        // Обновляем выбранный автомобиль
-        setSelectedCar({ ...selectedCar, carStatus: 'AVAILABLE' as const });
+        // Если есть точка назначения, обновляем локацию автомобиля
+        if (destLat && destLng && distanceKm) {
+          // Рассчитываем расход топлива (20% за 100 км пропорционально)
+          const fuelConsumptionPer100Km = 20.0;
+          const fuelConsumed = (distanceKm / 100.0) * fuelConsumptionPer100Km;
+          const newFuelLevel = Math.max(0, selectedCar.fuelLevel - fuelConsumed);
+          
+          // Обновляем автомобиль с новой локацией и топливом
+          const updatedCars = cars.map(car => {
+            if (car.carId === selectedCar.carId) {
+              return { 
+                ...car, 
+                carStatus: 'AVAILABLE' as const,
+                locationX: destLat,
+                locationY: destLng,
+                fuelLevel: parseFloat(newFuelLevel.toFixed(1))
+              };
+            }
+            return car;
+          });
+          setCars(updatedCars);
+          
+          // Обновляем выбранный автомобиль
+          setSelectedCar({ 
+            ...selectedCar, 
+            carStatus: 'AVAILABLE' as const,
+            locationX: destLat,
+            locationY: destLng,
+            fuelLevel: Math.round(newFuelLevel)
+          });
+          
+          // Очищаем маршрут
+          const map = mapRef.current;
+          if (destMarkerRef.current && map) {
+            try {
+              map.removeLayer(destMarkerRef.current);
+            } catch (error) {
+              console.error('Ошибка при удалении маркера назначения:', error);
+            }
+            destMarkerRef.current = null;
+          }
+          if (routingControlRef.current && map) {
+            try {
+              map.removeControl(routingControlRef.current);
+            } catch (error) {
+              console.error('Ошибка при удалении маршрута:', error);
+            }
+            routingControlRef.current = null;
+          }
+          setDestLat(null);
+          setDestLng(null);
+          setDistanceKm(null);
+          setRideCost(null);
+        } else {
+          // Просто завершаем поездку без обновления локации
+          const updatedCar = await endRide(selectedCar.carId, token);
+          
+          // Обновляем список авто��обилей
+          const updatedCars = cars.map(car => 
+            car.carId === selectedCar.carId 
+              ? { ...car, carStatus: 'AVAILABLE' as const }
+              : car
+          );
+          setCars(updatedCars);
+          
+          // Обновляем выбранный автомобиль
+          setSelectedCar({ ...selectedCar, carStatus: 'AVAILABLE' as const });
+        }
       }
       
       setBookingMsg('Поездка завершена!');
       
-      // Очищаем активный заказ если он есть
-      setActiveOrder(null);
     } catch (error: any) {
+      console.error('Ошибка завершения поездки:', error);
       setBookingMsg(error.message || 'Ошибка завершения поездки');
     } finally {
       setBookingLoading(false);
@@ -511,6 +586,13 @@ const MapPage: React.FC = () => {
       const fuelConsumptionPer100Km = 20.0;
       const fuelConsumed = (distanceKm / 100.0) * fuelConsumptionPer100Km;
       
+      console.log('Завершение заказа:', {
+        orderId: activeOrder.orderId,
+        distanceKm,
+        fuelConsumed,
+        newLocation: { destLat, destLng }
+      });
+      
       // Завершаем заказ с обновлением локации и топлива
       const updatedOrder = await endOrderWithLocation(
         activeOrder.orderId,
@@ -523,14 +605,23 @@ const MapPage: React.FC = () => {
         token
       );
       
+      console.log('Заказ завершен:', updatedOrder);
+      
       setActiveOrder(updatedOrder);
       setOrderError(null);
       
       // Обновляем список автомобилей с новой локацией и топливом
+      // Бэкенд уже обновил автомобиль, но мы обновляем локально для мгновенного отображения
       const updatedCars = cars.map(car => {
         if (car.carId === activeOrder.carId) {
           // Рассчитываем новый уровень топлива
           const newFuelLevel = Math.max(0, car.fuelLevel - fuelConsumed);
+          console.log('Автомобиль обновлен локально:', {
+            carId: car.carId,
+            oldFuelLevel: car.fuelLevel,
+            newFuelLevel,
+            newLocation: { destLat, destLng }
+          });
           return { 
             ...car, 
             carStatus: 'AVAILABLE' as const,
@@ -546,18 +637,29 @@ const MapPage: React.FC = () => {
       // Очищаем маршрут
       const map = mapRef.current;
       if (destMarkerRef.current && map) {
-        map.removeLayer(destMarkerRef.current);
+        try {
+          map.removeLayer(destMarkerRef.current);
+        } catch (error) {
+          console.error('Ошибка при удалении маркера назначения:', error);
+        }
         destMarkerRef.current = null;
       }
       if (routingControlRef.current && map) {
-        map.removeControl(routingControlRef.current);
+        try {
+          map.removeControl(routingControlRef.current);
+        } catch (error) {
+          console.error('Ошибка при удалении маршрута:', error);
+        }
         routingControlRef.current = null;
       }
       setDestLat(null);
       setDestLng(null);
       setDistanceKm(null);
       setRideCost(null);
+      
+      console.log('Заказ успешно завершен и маршрут очищен');
     } catch (error: any) {
+      console.error('Ошибка завершения заказа:', error);
       setOrderError(error.message || 'Ошибка завершения заказа');
     } finally {
       setOrderLoading(false);
@@ -571,13 +673,21 @@ const MapPage: React.FC = () => {
 
     // Удаляем предыдущий маркер назначения
     if (destMarkerRef.current) {
-      map.removeLayer(destMarkerRef.current);
+      try {
+        map.removeLayer(destMarkerRef.current);
+      } catch (error) {
+        console.error('Ошибка при удалении маркера назначения:', error);
+      }
       destMarkerRef.current = null;
     }
 
     // Удаляем предыдущий маршрут
     if (routingControlRef.current) {
-      map.removeControl(routingControlRef.current);
+      try {
+        map.removeControl(routingControlRef.current);
+      } catch (error) {
+        console.error('Ошибка при удалении предыдущего маршрута:', error);
+      }
       routingControlRef.current = null;
     }
 
@@ -610,7 +720,11 @@ const MapPage: React.FC = () => {
 
     // Удаляем предыдущий маршрут
     if (routingControlRef.current) {
-      map.removeControl(routingControlRef.current);
+      try {
+        map.removeControl(routingControlRef.current);
+      } catch (error) {
+        console.error('Ошибка при удалении предыдущего маршрута:', error);
+      }
       routingControlRef.current = null;
     }
 
@@ -779,7 +893,11 @@ const MapPage: React.FC = () => {
                         destMarkerRef.current = null;
                       }
                       if (routingControlRef.current && map) {
-                        map.removeControl(routingControlRef.current);
+                        try {
+                          map.removeControl(routingControlRef.current);
+                        } catch (error) {
+                          console.error('Ошибка при удалении маршрута:', error);
+                        }
                         routingControlRef.current = null;
                       }
                       setDestLat(null);

@@ -10,5 +10,6 @@ import org.sharing.carsharing.model.UserCredentials;
 public interface UserCredentialsMapper {
     @Mapping(source = "driverLicence", target = "driverLicense")
     UserCredentialsDto toDto(UserCredentials userCredentials);
+    
     UserCredentials toEntity(RegistrationCredentialsRequest userCredentialsDto);
 }

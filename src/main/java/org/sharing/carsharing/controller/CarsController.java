@@ -13,6 +13,7 @@ import org.sharing.carsharing.model.enums.CarStatus;
 import org.sharing.carsharing.model.enums.Role;
 import org.sharing.carsharing.service.AdminAccessService;
 import org.sharing.carsharing.service.CarsService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -86,5 +87,50 @@ public class CarsController {
             @PathVariable Long id,
             @RequestParam CarStatus status) {
         return ResponseEntity.ok(carsService.updateCarStatus(id, status));
+    }
+    
+    @PutMapping("/{id}/book")
+    public ResponseEntity<CarDto> bookCar(
+            @PathVariable Long id,
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        try {
+            // Проверяем авторизацию
+            adminAccessService.requireUser(authHeader);
+            CarDto updatedCar = carsService.bookCar(id);
+            return ResponseEntity.ok(updatedCar);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(null);
+        }
+    }
+    
+    @PutMapping("/{id}/start")
+    public ResponseEntity<CarDto> startRide(
+            @PathVariable Long id,
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        try {
+            // Проверяем авторизацию
+            adminAccessService.requireUser(authHeader);
+            CarDto updatedCar = carsService.startRide(id);
+            return ResponseEntity.ok(updatedCar);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(null);
+        }
+    }
+    
+    @PutMapping("/{id}/end")
+    public ResponseEntity<CarDto> endRide(
+            @PathVariable Long id,
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        try {
+            // Проверяем авторизацию
+            adminAccessService.requireUser(authHeader);
+            CarDto updatedCar = carsService.endRide(id);
+            return ResponseEntity.ok(updatedCar);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(null);
+        }
     }
 }
