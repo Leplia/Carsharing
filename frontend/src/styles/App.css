@@ -24,3 +24,15 @@ body {
   margin: 0 auto;
   padding: 0 20px;
 }
+
+
+/* Импорт стилей страниц */
+@import './pages/SitePages.css';
+@import './pages/HomePage.css';
+@import './pages/MapPage.css';
+@import './pages/ProfilePage.css';
+@import './pages/AdminPage.css';
+@import './pages/AdminManagementPage.css';
+@import './pages/VerificationPage.css';
+@import './pages/CarsPage.css';
+@import './pages/AboutPage.css';

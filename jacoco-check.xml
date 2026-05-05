@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<ruleset name="JaCoCo Coverage Rules"
+         xmlns="http://jacoco.org/ruleset/1.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://jacoco.org/ruleset/1.0 https://www.jacoco.org/ruleset/ruleset-1.0.xsd">
+
+    <!-- Минимальные требования к покрытию кода -->
+    <rule>
+        <element>BUNDLE</element>
+        <limits>
+            <!-- Минимум 60% покрытия инструкций -->
+            <limit>
+                <counter>INSTRUCTION</counter>
+                <value>COVEREDRATIO</value>
+                <minimum>0.60</minimum>
+            </limit>
+            <!-- Минимум 50% покрытия ветвей -->
+            <limit>
+                <counter>BRANCH</counter>
+                <value>COVEREDRATIO</value>
+                <minimum>0.50</minimum>
+            </limit>
+            <!-- Минимум 70% покрытия строк -->
+            <limit>
+                <counter>LINE</counter>
+                <value>COVEREDRATIO</value>
+                <minimum>0.70</minimum>
+            </limit>
+            <!-- Минимум 70% покрытия методов -->
+            <limit>
+                <counter>METHOD</counter>
+                <value>COVEREDRATIO</value>
+                <minimum>0.70</minimum>
+            </limit>
+            <!-- Минимум 60% покрытия классов -->
+            <limit>
+                <counter>CLASS</counter>
+                <value>COVEREDRATIO</value>
+                <minimum>0.60</minimum>
+            </limit>
+        </limits>
+    </rule>
+
+    <!-- Правила для контроллеров -->
+    <rule>
+        <element>CLASS</element>
+        <regex>.*Controller</regex>
+        <limits>
+            <!-- Контроллеры должны иметь высокое покрытие -->
+            <limit>
+                <counter>LINE</counter>
+                <value>COVEREDRATIO</value>
+                <minimum>0.80</minimum>
+            </limit>
+            <limit>
+                <counter>METHOD</counter>
+                <value>COVEREDRATIO</value>
+                <minimum>0.80</minimum>
+            </limit>
+        </limits>
+    </rule>
+
+    <!-- Правила для сервисов -->
+    <rule>
+        <element>CLASS</element>
+        <regex>.*Service</regex>
+        <limits>
+            <!-- Сервисы должны иметь высокое покрытие -->
+            <limit>
+                <counter>LINE</counter>
+                <value>COVEREDRATIO</value>
+                <minimum>0.85</minimum>
+            </limit>
+            <limit>
+                <counter>METHOD</counter>
+                <value>COVEREDRATIO</value>
+                <minimum>0.85</minimum>
+            </limit>
+            <limit>
+                <counter>BRANCH</counter>
+                <value>COVEREDRATIO</value>
+                <minimum>0.70</minimum>
+            </limit>
+        </limits>
+    </rule>
+
+    <!-- Правила для репозиториев (обычно тестируются через интеграционные тесты) -->
+    <rule>
+        <element>CLASS</element>
+        <regex>.*Repository</regex>
+        <limits>
+            <!-- Репозитории могут иметь более низкое покрытие, т.к. тестируются интеграционно -->
+            <limit>
+                <counter>LINE</counter>
+                <value>COVEREDRATIO</value>
+                <minimum>0.50</minimum>
+            </limit>
+        </limits>
+    </rule>
+
+    <!-- Исключения для DTO, моделей и конфигураций -->
+    <rule>
+        <element>CLASS</element>
+        <regex>.*Dto$|.*Model$|.*Config$|.*Mapper$|.*Exception$</regex>
+        <limits>
+            <!-- Эти классы могут иметь низкое покрытие -->
+            <limit>
+                <counter>LINE</counter>
+                <value>COVEREDRATIO</value>
+                <minimum>0.30</minimum>
+            </limit>
+        </limits>
+    </rule>
+
+    <!-- Исключения для Lombok-классов -->
+    <rule>
+        <element>CLASS</element>
+        <regex>.*\.dto\..*|.*\.model\..*</regex>
+        <limits>
+            <!-- DTO и модели, сгенерированные Lombok, могут иметь 0% покрытия -->
+            <limit>
+                <counter>LINE</counter>
+                <value>COVEREDRATIO</value>
+                <minimum>0.00</minimum>
+            </limit>
+        </limits>
+    </rule>
+
+</ruleset>

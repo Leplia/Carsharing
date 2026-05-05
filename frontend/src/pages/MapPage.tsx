@@ -352,7 +352,7 @@ const MapPage: React.FC = () => {
 
   // Создание заказа
   const handleCreateOrder = async () => {
-    if (!selectedCar || !rideCost || !isAuthenticated || !user) {
+    if (!selectedCar || rideCost === null || rideCost === undefined || !isAuthenticated || !user) {
       setOrderError('Недостаточно данных для создания заказа');
       return;
     }

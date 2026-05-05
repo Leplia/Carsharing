@@ -1,0 +1,2218 @@
+2026-05-05T10:51:03.541+03:00  INFO 21764 --- [Carsharing] [main] o.s.carsharing.CarsharingApplication     : Starting CarsharingApplication using Java 23.0.1 with PID 21764 (D:\Projects\Carsharing\target\classes started by Admin in D:\Projects\Carsharing)
+2026-05-05T10:51:03.559+03:00 DEBUG 21764 --- [Carsharing] [main] o.s.carsharing.CarsharingApplication     : Running with Spring Boot v3.2.5, Spring v6.1.6
+2026-05-05T10:51:03.559+03:00  INFO 21764 --- [Carsharing] [main] o.s.carsharing.CarsharingApplication     : No active profile set, falling back to 1 default profile: "default"
+2026-05-05T10:51:07.485+03:00 DEBUG 21764 --- [Carsharing] [main] o.s.c.util.JwtAuthenticationFilter       : Filter 'jwtAuthenticationFilter' configured for use
+2026-05-05T10:51:07.487+03:00 DEBUG 21764 --- [Carsharing] [main] o.s.w.f.ServerHttpObservationFilter      : Filter 'webMvcObservationFilter' configured for use
+2026-05-05T10:51:07.756+03:00  WARN 21764 --- [Carsharing] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-05T10:51:08.015+03:00 DEBUG 21764 --- [Carsharing] [main] s.w.s.m.m.a.RequestMappingHandlerMapping : 42 mappings in 'requestMappingHandlerMapping'
+2026-05-05T10:51:08.097+03:00 DEBUG 21764 --- [Carsharing] [main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2026-05-05T10:51:08.306+03:00  INFO 21764 --- [Carsharing] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@12dcfa6a, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1f9009d3, org.springframework.security.web.context.SecurityContextHolderFilter@26ab3c1b, org.springframework.security.web.header.HeaderWriterFilter@1440a166, org.springframework.web.filter.CorsFilter@4c9ed40, org.springframework.security.web.authentication.logout.LogoutFilter@4d4f6121, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@37c1e2a4, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@331b0bfd, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@48028e11, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@56394880, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@55a46bf3, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@536d153b, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@23c3f787, org.springframework.security.web.session.SessionManagementFilter@78f2cab9, org.springframework.security.web.access.ExceptionTranslationFilter@76a41af0, org.springframework.security.web.access.intercept.AuthorizationFilter@1dade178]
+2026-05-05T10:51:08.390+03:00 DEBUG 21764 --- [Carsharing] [main] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2026-05-05T10:51:08.416+03:00 DEBUG 21764 --- [Carsharing] [main] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2026-05-05T10:51:08.751+03:00  INFO 21764 --- [Carsharing] [main] o.s.carsharing.CarsharingApplication     : Started CarsharingApplication in 5.598 seconds (process running for 6.266)
+2026-05-05T10:51:08.899+03:00 DEBUG 21764 --- [Carsharing] [main] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id 
+    from
+        users u1_0 
+    where
+        u1_0.login=? 
+    fetch
+        first ? rows only
+2026-05-05T10:51:09.091+03:00 DEBUG 21764 --- [Carsharing] [main] org.hibernate.SQL                        : 
+    select
+        count(*) 
+    from
+        car_manufactures cm1_0
+2026-05-05T10:51:09.096+03:00 DEBUG 21764 --- [Carsharing] [main] org.hibernate.SQL                        : 
+    select
+        count(*) 
+    from
+        car_models cm1_0
+2026-05-05T10:51:09.661+03:00  INFO 21764 --- [Carsharing] [RMI TCP Connection(5)-26.236.17.183] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-05T10:51:09.662+03:00 DEBUG 21764 --- [Carsharing] [RMI TCP Connection(5)-26.236.17.183] o.s.web.servlet.DispatcherServlet        : Detected StandardServletMultipartResolver
+2026-05-05T10:51:09.662+03:00 DEBUG 21764 --- [Carsharing] [RMI TCP Connection(5)-26.236.17.183] o.s.web.servlet.DispatcherServlet        : Detected AcceptHeaderLocaleResolver
+2026-05-05T10:51:09.662+03:00 DEBUG 21764 --- [Carsharing] [RMI TCP Connection(5)-26.236.17.183] o.s.web.servlet.DispatcherServlet        : Detected FixedThemeResolver
+2026-05-05T10:51:09.664+03:00 DEBUG 21764 --- [Carsharing] [RMI TCP Connection(5)-26.236.17.183] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@d69fd7a
+2026-05-05T10:51:09.665+03:00 DEBUG 21764 --- [Carsharing] [RMI TCP Connection(5)-26.236.17.183] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.support.SessionFlashMapManager@3f7d20c5
+2026-05-05T10:51:09.665+03:00 DEBUG 21764 --- [Carsharing] [RMI TCP Connection(5)-26.236.17.183] o.s.web.servlet.DispatcherServlet        : enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2026-05-05T10:51:09.665+03:00  INFO 21764 --- [Carsharing] [RMI TCP Connection(5)-26.236.17.183] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2026-05-05T10:53:22.104+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/cars/getAllCars
+2026-05-05T10:53:22.104+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/cars/getAllCars
+2026-05-05T10:53:22.129+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /api/cars/getAllCars
+2026-05-05T10:53:22.132+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-05-05T10:53:22.135+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /api/cars/getAllCars
+2026-05-05T10:53:22.136+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/api/cars/getAllCars", parameters={}
+2026-05-05T10:53:22.137+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to org.sharing.carsharing.controller.CarsController#getAllCars()
+2026-05-05T10:53:22.155+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        c1_0.car_id,
+        c1_0.model_id,
+        c1_0.status,
+        c1_0.color,
+        c1_0.description,
+        c1_0.fuel_level,
+        c1_0.location_x,
+        c1_0.location_y,
+        c1_0.photo_url,
+        c1_0.vin_number,
+        c1_0.year 
+    from
+        cars c1_0
+2026-05-05T10:53:22.175+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:53:22.178+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:53:22.179+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:53:22.181+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:53:22.183+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:53:22.185+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:53:22.186+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:53:22.187+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:53:22.187+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:53:22.190+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:53:22.198+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-05-05T10:53:22.199+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[org.sharing.carsharing.dto.carDto.CarDto@393ada75, org.sharing.carsharing.dto.carDto.CarDto@ebc28c3 (truncated)...]
+2026-05-05T10:53:22.226+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2026-05-05T10:53:22.227+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /api/cars/getAllCars
+2026-05-05T10:53:22.231+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-05-05T10:53:22.233+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /api/cars/getAllCars
+2026-05-05T10:53:22.233+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/api/cars/getAllCars", parameters={}
+2026-05-05T10:53:22.234+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to org.sharing.carsharing.controller.CarsController#getAllCars()
+2026-05-05T10:53:22.237+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] org.hibernate.SQL                        : 
+    select
+        c1_0.car_id,
+        c1_0.model_id,
+        c1_0.status,
+        c1_0.color,
+        c1_0.description,
+        c1_0.fuel_level,
+        c1_0.location_x,
+        c1_0.location_y,
+        c1_0.photo_url,
+        c1_0.vin_number,
+        c1_0.year 
+    from
+        cars c1_0
+2026-05-05T10:53:22.241+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:53:22.243+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:53:22.244+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:53:22.246+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:53:22.248+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:53:22.249+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:53:22.251+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:53:22.252+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:53:22.255+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:53:22.256+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:53:22.257+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-05-05T10:53:22.257+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[org.sharing.carsharing.dto.carDto.CarDto@567ae877, org.sharing.carsharing.dto.carDto.CarDto@2c6a698 (truncated)...]
+2026-05-05T10:53:22.259+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2026-05-05T10:54:58.500+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/auth/login
+2026-05-05T10:54:58.507+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing POST /api/auth/login
+2026-05-05T10:54:58.509+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-05-05T10:54:58.510+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Secured POST /api/auth/login
+2026-05-05T10:54:58.511+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : POST "/api/auth/login", parameters={}
+2026-05-05T10:54:58.512+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to org.sharing.carsharing.controller.AuthController#login(LoginRequest)
+2026-05-05T10:54:58.540+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [org.sharing.carsharing.dto.LoginRequest@27b8ba73]
+2026-05-05T10:54:58.547+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2026-05-05T10:54:58.642+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] org.hibernate.SQL                        : 
+    select
+        uc1_0.credentials_id,
+        uc1_0.birth_date,
+        uc1_0.driver_licence,
+        uc1_0.first_name,
+        uc1_0.last_name,
+        uc1_0.passport_number,
+        uc1_0.verification_date,
+        uc1_0.verified 
+    from
+        user_credentials uc1_0 
+    where
+        uc1_0.credentials_id=?
+2026-05-05T10:54:58.646+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.cridentials_id=?
+2026-05-05T10:54:58.649+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [application/json, text/plain, */*] and supported [application/json, application/*+json]
+2026-05-05T10:54:58.649+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [org.sharing.carsharing.dto.AuthResponse@4ac939f0]
+2026-05-05T10:54:58.652+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2026-05-05T10:54:58.691+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/cars/getAllCars
+2026-05-05T10:54:58.693+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/cars/getAllCars
+2026-05-05T10:54:58.697+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /api/cars/getAllCars
+2026-05-05T10:54:58.699+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-05-05T10:54:58.699+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /api/cars/getAllCars
+2026-05-05T10:54:58.718+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:54:58.722+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/api/cars/getAllCars", parameters={}
+2026-05-05T10:54:58.722+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to org.sharing.carsharing.controller.CarsController#getAllCars()
+2026-05-05T10:54:58.724+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        c1_0.car_id,
+        c1_0.model_id,
+        c1_0.status,
+        c1_0.color,
+        c1_0.description,
+        c1_0.fuel_level,
+        c1_0.location_x,
+        c1_0.location_y,
+        c1_0.photo_url,
+        c1_0.vin_number,
+        c1_0.year 
+    from
+        cars c1_0
+2026-05-05T10:54:58.726+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:54:58.728+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:54:58.729+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:54:58.730+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:54:58.731+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:54:58.731+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:54:58.732+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:54:58.733+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:54:58.734+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:54:58.735+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:54:58.736+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-05-05T10:54:58.736+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[org.sharing.carsharing.dto.carDto.CarDto@6b11b615, org.sharing.carsharing.dto.carDto.CarDto@58a7a2f (truncated)...]
+2026-05-05T10:54:58.738+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2026-05-05T10:54:58.738+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/cars/getAllCars
+2026-05-05T10:54:58.739+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-05-05T10:54:58.740+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /api/cars/getAllCars
+2026-05-05T10:54:58.744+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:54:58.745+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/api/cars/getAllCars", parameters={}
+2026-05-05T10:54:58.746+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to org.sharing.carsharing.controller.CarsController#getAllCars()
+2026-05-05T10:54:58.747+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        c1_0.car_id,
+        c1_0.model_id,
+        c1_0.status,
+        c1_0.color,
+        c1_0.description,
+        c1_0.fuel_level,
+        c1_0.location_x,
+        c1_0.location_y,
+        c1_0.photo_url,
+        c1_0.vin_number,
+        c1_0.year 
+    from
+        cars c1_0
+2026-05-05T10:54:58.749+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:54:58.750+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:54:58.751+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:54:58.751+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:54:58.752+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:54:58.752+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:54:58.753+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:54:58.754+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:54:58.754+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:54:58.755+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:54:58.755+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-05-05T10:54:58.757+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[org.sharing.carsharing.dto.carDto.CarDto@4f6cda13, org.sharing.carsharing.dto.carDto.CarDto@4f81319 (truncated)...]
+2026-05-05T10:54:58.758+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2026-05-05T10:54:59.004+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/user/orders/active
+2026-05-05T10:54:59.004+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/user/orders/active
+2026-05-05T10:54:59.008+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /api/user/orders/active
+2026-05-05T10:54:59.009+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-05-05T10:54:59.010+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /api/user/orders/active
+2026-05-05T10:54:59.015+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:54:59.016+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/api/user/orders/active", parameters={}
+2026-05-05T10:54:59.017+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to org.sharing.carsharing.controller.UserOrdersController#getActiveOrder(String)
+2026-05-05T10:54:59.025+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:54:59.030+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] org.hibernate.SQL                        : 
+    select
+        o1_0.order_id,
+        o1_0.car_id,
+        o1_0.discount,
+        o1_0.distance,
+        o1_0.end_time,
+        o1_0.payment_id,
+        o1_0.price,
+        o1_0.rating_edits,
+        o1_0.spend_fuel,
+        o1_0.start_time,
+        o1_0.status,
+        o1_0.user_id 
+    from
+        orders o1_0 
+    left join
+        users u1_0 
+            on u1_0.user_id=o1_0.user_id 
+    where
+        u1_0.user_id=? 
+        and o1_0.status=?
+2026-05-05T10:54:59.033+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-05-05T10:54:59.033+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Nothing to write: null body
+2026-05-05T10:54:59.033+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2026-05-05T10:54:59.035+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /api/user/orders/active
+2026-05-05T10:54:59.036+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-05-05T10:54:59.036+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /api/user/orders/active
+2026-05-05T10:54:59.040+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:54:59.042+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/api/user/orders/active", parameters={}
+2026-05-05T10:54:59.042+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to org.sharing.carsharing.controller.UserOrdersController#getActiveOrder(String)
+2026-05-05T10:54:59.046+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:54:59.049+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        o1_0.order_id,
+        o1_0.car_id,
+        o1_0.discount,
+        o1_0.distance,
+        o1_0.end_time,
+        o1_0.payment_id,
+        o1_0.price,
+        o1_0.rating_edits,
+        o1_0.spend_fuel,
+        o1_0.start_time,
+        o1_0.status,
+        o1_0.user_id 
+    from
+        orders o1_0 
+    left join
+        users u1_0 
+            on u1_0.user_id=o1_0.user_id 
+    where
+        u1_0.user_id=? 
+        and o1_0.status=?
+2026-05-05T10:54:59.050+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-05-05T10:54:59.050+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Nothing to write: null body
+2026-05-05T10:54:59.050+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2026-05-05T10:55:00.076+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/cars/getAllCars
+2026-05-05T10:55:00.077+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/cars/models
+2026-05-05T10:55:00.081+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/reviews/all
+2026-05-05T10:55:00.081+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/user/getAllUsers
+2026-05-05T10:55:00.082+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/cars/manufactures
+2026-05-05T10:55:00.082+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/admin/stats
+2026-05-05T10:55:00.082+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/cars/getAllCars
+2026-05-05T10:55:00.085+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/cars/models
+2026-05-05T10:55:00.085+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/reviews/all
+2026-05-05T10:55:00.085+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/admin/stats
+2026-05-05T10:55:00.086+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/user/getAllUsers
+2026-05-05T10:55:00.086+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/cars/manufactures
+2026-05-05T10:55:00.087+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /api/cars/getAllCars
+2026-05-05T10:55:00.088+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-05-05T10:55:00.089+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /api/cars/getAllCars
+2026-05-05T10:55:00.089+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /api/cars/models
+2026-05-05T10:55:00.089+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/reviews/all
+2026-05-05T10:55:00.089+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-05-05T10:55:00.089+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /api/user/getAllUsers
+2026-05-05T10:55:00.089+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /api/cars/models
+2026-05-05T10:55:00.090+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-05-05T10:55:00.090+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /api/cars/manufactures
+2026-05-05T10:55:00.090+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-05-05T10:55:00.090+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /api/user/getAllUsers
+2026-05-05T10:55:00.090+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-05-05T10:55:00.090+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /api/reviews/all
+2026-05-05T10:55:00.090+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /api/cars/manufactures
+2026-05-05T10:55:00.091+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /api/admin/stats
+2026-05-05T10:55:00.091+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-05-05T10:55:00.091+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /api/admin/stats
+2026-05-05T10:55:00.094+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:55:00.095+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:55:00.095+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:55:00.096+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/api/cars/getAllCars", parameters={}
+2026-05-05T10:55:00.096+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:55:00.096+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to org.sharing.carsharing.controller.CarsController#getAllCars()
+2026-05-05T10:55:00.096+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:55:00.096+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:55:00.097+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/api/user/getAllUsers", parameters={}
+2026-05-05T10:55:00.097+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/api/reviews/all", parameters={}
+2026-05-05T10:55:00.098+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] org.hibernate.SQL                        : 
+    select
+        c1_0.car_id,
+        c1_0.model_id,
+        c1_0.status,
+        c1_0.color,
+        c1_0.description,
+        c1_0.fuel_level,
+        c1_0.location_x,
+        c1_0.location_y,
+        c1_0.photo_url,
+        c1_0.vin_number,
+        c1_0.year 
+    from
+        cars c1_0
+2026-05-05T10:55:00.098+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to org.sharing.carsharing.controller.UserController#getAllUsers()
+2026-05-05T10:55:00.098+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to org.sharing.carsharing.controller.ReviewController#getAllReviews()
+2026-05-05T10:55:00.098+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/api/cars/manufactures", parameters={}
+2026-05-05T10:55:00.098+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to org.sharing.carsharing.controller.CarsController#getAllCarManufactures()
+2026-05-05T10:55:00.099+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/api/admin/stats", parameters={}
+2026-05-05T10:55:00.099+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0
+2026-05-05T10:55:00.099+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to org.sharing.carsharing.controller.AdminController#getStats(String)
+2026-05-05T10:55:00.099+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/api/cars/models", parameters={}
+2026-05-05T10:55:00.099+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to org.sharing.carsharing.controller.CarsController#getCarModels()
+2026-05-05T10:55:00.100+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0
+2026-05-05T10:55:00.101+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        r1_0.review_id,
+        r1_0.admin_reply,
+        r1_0.car_id,
+        r1_0.rating,
+        r1_0.reply_date,
+        r1_0.review_date,
+        r1_0.review_text,
+        r1_0.user_id 
+    from
+        reviews r1_0 
+    order by
+        r1_0.review_date desc
+2026-05-05T10:55:00.101+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:55:00.101+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0
+2026-05-05T10:55:00.102+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] org.hibernate.SQL                        : 
+    select
+        uc1_0.credentials_id,
+        uc1_0.birth_date,
+        uc1_0.driver_licence,
+        uc1_0.first_name,
+        uc1_0.last_name,
+        uc1_0.passport_number,
+        uc1_0.verification_date,
+        uc1_0.verified 
+    from
+        user_credentials uc1_0 
+    where
+        uc1_0.credentials_id=?
+2026-05-05T10:55:00.102+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-05-05T10:55:00.102+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[org.sharing.carsharing.dto.carDto.CarManufactureDto@ab43b92, org.sharing.carsharing.dto.carDto.CarM (truncated)...]
+2026-05-05T10:55:00.102+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:55:00.104+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2026-05-05T10:55:00.104+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.cridentials_id=?
+2026-05-05T10:55:00.104+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:55:00.104+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:55:00.104+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-05-05T10:55:00.104+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[]]
+2026-05-05T10:55:00.104+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:55:00.105+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2026-05-05T10:55:00.105+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] org.hibernate.SQL                        : 
+    select
+        uc1_0.credentials_id,
+        uc1_0.birth_date,
+        uc1_0.driver_licence,
+        uc1_0.first_name,
+        uc1_0.last_name,
+        uc1_0.passport_number,
+        uc1_0.verification_date,
+        uc1_0.verified 
+    from
+        user_credentials uc1_0 
+    where
+        uc1_0.credentials_id=?
+2026-05-05T10:55:00.105+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:55:00.105+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:55:00.105+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.cridentials_id=?
+2026-05-05T10:55:00.105+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:55:00.107+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:55:00.107+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:55:00.107+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-05-05T10:55:00.108+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[org.sharing.carsharing.dto.UserDto@376fea95, org.sharing.carsharing.dto.UserDto@2a328c1a, org.shari (truncated)...]
+2026-05-05T10:55:00.107+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /api/cars/manufactures
+2026-05-05T10:55:00.108+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:55:00.108+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /api/reviews/all
+2026-05-05T10:55:00.108+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        count(*) 
+    from
+        users u1_0
+2026-05-05T10:55:00.109+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:55:00.109+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2026-05-05T10:55:00.110+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-9] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-05-05T10:55:00.110+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-05-05T10:55:00.110+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:55:00.110+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-05-05T10:55:00.110+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[org.sharing.carsharing.dto.carDto.CarModelOptionDto@5881ec5a, org.sharing.carsharing.dto.carDto.Car (truncated)...]
+2026-05-05T10:55:00.110+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /api/cars/manufactures
+2026-05-05T10:55:00.110+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /api/reviews/all
+2026-05-05T10:55:00.111+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /api/user/getAllUsers
+2026-05-05T10:55:00.111+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:55:00.111+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0
+2026-05-05T10:55:00.112+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2026-05-05T10:55:00.112+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:55:00.113+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-05-05T10:55:00.113+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /api/user/getAllUsers
+2026-05-05T10:55:00.113+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-05-05T10:55:00.113+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /api/cars/models
+2026-05-05T10:55:00.113+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[org.sharing.carsharing.dto.carDto.CarDto@704d2d7, org.sharing.carsharing.dto.carDto.CarDto@5801cfd4 (truncated)...]
+2026-05-05T10:55:00.115+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2026-05-05T10:55:00.115+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0
+2026-05-05T10:55:00.115+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-05-05T10:55:00.117+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /api/cars/models
+2026-05-05T10:55:00.117+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /api/cars/getAllCars
+2026-05-05T10:55:00.118+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-05-05T10:55:00.118+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /api/cars/getAllCars
+2026-05-05T10:55:00.119+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        count(*) 
+    from
+        cars c1_0
+2026-05-05T10:55:00.119+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-9] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:55:00.119+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:55:00.119+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:55:00.120+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/api/reviews/all", parameters={}
+2026-05-05T10:55:00.121+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/api/user/getAllUsers", parameters={}
+2026-05-05T10:55:00.121+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/api/cars/manufactures", parameters={}
+2026-05-05T10:55:00.121+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-9] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to org.sharing.carsharing.controller.ReviewController#getAllReviews()
+2026-05-05T10:55:00.121+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to org.sharing.carsharing.controller.UserController#getAllUsers()
+2026-05-05T10:55:00.121+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to org.sharing.carsharing.controller.CarsController#getAllCarManufactures()
+2026-05-05T10:55:00.122+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0
+2026-05-05T10:55:00.122+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0
+2026-05-05T10:55:00.122+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-9] org.hibernate.SQL                        : 
+    select
+        r1_0.review_id,
+        r1_0.admin_reply,
+        r1_0.car_id,
+        r1_0.rating,
+        r1_0.reply_date,
+        r1_0.review_date,
+        r1_0.review_text,
+        r1_0.user_id 
+    from
+        reviews r1_0 
+    order by
+        r1_0.review_date desc
+2026-05-05T10:55:00.122+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:55:00.122+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        c1_0.car_id,
+        c1_0.model_id,
+        c1_0.status,
+        c1_0.color,
+        c1_0.description,
+        c1_0.fuel_level,
+        c1_0.location_x,
+        c1_0.location_y,
+        c1_0.photo_url,
+        c1_0.vin_number,
+        c1_0.year 
+    from
+        cars c1_0 
+    where
+        c1_0.status=?
+2026-05-05T10:55:00.123+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-05-05T10:55:00.123+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-7] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:55:00.123+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[]]
+2026-05-05T10:55:00.123+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/api/cars/getAllCars", parameters={}
+2026-05-05T10:55:00.123+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to org.sharing.carsharing.controller.CarsController#getAllCars()
+2026-05-05T10:55:00.123+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2026-05-05T10:55:00.124+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/api/cars/models", parameters={}
+2026-05-05T10:55:00.124+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-05-05T10:55:00.124+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[org.sharing.carsharing.dto.carDto.CarManufactureDto@241ed4b0, org.sharing.carsharing.dto.carDto.Car (truncated)...]
+2026-05-05T10:55:00.124+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to org.sharing.carsharing.controller.CarsController#getCarModels()
+2026-05-05T10:55:00.124+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] org.hibernate.SQL                        : 
+    select
+        uc1_0.credentials_id,
+        uc1_0.birth_date,
+        uc1_0.driver_licence,
+        uc1_0.first_name,
+        uc1_0.last_name,
+        uc1_0.passport_number,
+        uc1_0.verification_date,
+        uc1_0.verified 
+    from
+        user_credentials uc1_0 
+    where
+        uc1_0.credentials_id=?
+2026-05-05T10:55:00.124+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        c1_0.car_id,
+        c1_0.model_id,
+        c1_0.status,
+        c1_0.color,
+        c1_0.description,
+        c1_0.fuel_level,
+        c1_0.location_x,
+        c1_0.location_y,
+        c1_0.photo_url,
+        c1_0.vin_number,
+        c1_0.year 
+    from
+        cars c1_0
+2026-05-05T10:55:00.125+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2026-05-05T10:55:00.125+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-7] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0
+2026-05-05T10:55:00.125+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.cridentials_id=?
+2026-05-05T10:55:00.125+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        c1_0.car_id,
+        c1_0.model_id,
+        c1_0.status,
+        c1_0.color,
+        c1_0.description,
+        c1_0.fuel_level,
+        c1_0.location_x,
+        c1_0.location_y,
+        c1_0.photo_url,
+        c1_0.vin_number,
+        c1_0.year 
+    from
+        cars c1_0 
+    where
+        c1_0.status=?
+2026-05-05T10:55:00.127+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] org.hibernate.SQL                        : 
+    select
+        uc1_0.credentials_id,
+        uc1_0.birth_date,
+        uc1_0.driver_licence,
+        uc1_0.first_name,
+        uc1_0.last_name,
+        uc1_0.passport_number,
+        uc1_0.verification_date,
+        uc1_0.verified 
+    from
+        user_credentials uc1_0 
+    where
+        uc1_0.credentials_id=?
+2026-05-05T10:55:00.127+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:55:00.127+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-7] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:55:00.128+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.cridentials_id=?
+2026-05-05T10:55:00.128+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:55:00.128+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-7] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:55:00.128+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        count(*) 
+    from
+        reviews r1_0
+2026-05-05T10:55:00.129+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:55:00.129+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-7] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:55:00.129+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-05-05T10:55:00.129+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[org.sharing.carsharing.dto.UserDto@50f7eefc, org.sharing.carsharing.dto.UserDto@454d3b33, org.shari (truncated)...]
+2026-05-05T10:55:00.130+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:55:00.130+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-7] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:55:00.130+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2026-05-05T10:55:00.130+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:55:00.130+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-05-05T10:55:00.130+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[org.sharing.carsharing.dto.carDto.CarModelOptionDto@46320cb3, org.sharing.carsharing.dto.carDto.Car (truncated)...]
+2026-05-05T10:55:00.131+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2026-05-05T10:55:00.132+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:55:00.132+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        r1_0.review_id,
+        r1_0.admin_reply,
+        r1_0.car_id,
+        r1_0.rating,
+        r1_0.reply_date,
+        r1_0.review_date,
+        r1_0.review_text,
+        r1_0.user_id 
+    from
+        reviews r1_0
+2026-05-05T10:55:00.132+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:55:00.133+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:55:00.134+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        cm1_0.manufactyre_id,
+        cm1_0.badge_url,
+        cm1_0.country,
+        cm1_0.name 
+    from
+        car_manufactures cm1_0 
+    where
+        cm1_0.manufactyre_id=?
+2026-05-05T10:55:00.134+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        cm1_0.model_id,
+        cm1_0.body_type,
+        cm1_0.manufacture_id,
+        cm1_0.coefficient,
+        cm1_0.name,
+        cm1_0.seats,
+        cm1_0.transmission 
+    from
+        car_models cm1_0 
+    where
+        cm1_0.model_id=?
+2026-05-05T10:55:00.135+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-05-05T10:55:00.135+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [org.sharing.carsharing.dto.AdminStatsDto@2a7ca44f]
+2026-05-05T10:55:00.136+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-05-05T10:55:00.136+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[org.sharing.carsharing.dto.carDto.CarDto@105c0ea6, org.sharing.carsharing.dto.carDto.CarDto@46c2d70 (truncated)...]
+2026-05-05T10:55:00.136+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2026-05-05T10:55:00.137+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2026-05-05T10:55:00.138+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/admin/stats
+2026-05-05T10:55:00.138+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-05-05T10:55:00.139+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /api/admin/stats
+2026-05-05T10:55:00.143+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:55:00.145+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/api/admin/stats", parameters={}
+2026-05-05T10:55:00.145+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to org.sharing.carsharing.controller.AdminController#getStats(String)
+2026-05-05T10:55:00.148+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:55:00.150+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        count(*) 
+    from
+        users u1_0
+2026-05-05T10:55:00.152+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0
+2026-05-05T10:55:00.155+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0
+2026-05-05T10:55:00.157+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        count(*) 
+    from
+        cars c1_0
+2026-05-05T10:55:00.159+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        c1_0.car_id,
+        c1_0.model_id,
+        c1_0.status,
+        c1_0.color,
+        c1_0.description,
+        c1_0.fuel_level,
+        c1_0.location_x,
+        c1_0.location_y,
+        c1_0.photo_url,
+        c1_0.vin_number,
+        c1_0.year 
+    from
+        cars c1_0 
+    where
+        c1_0.status=?
+2026-05-05T10:55:00.161+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        c1_0.car_id,
+        c1_0.model_id,
+        c1_0.status,
+        c1_0.color,
+        c1_0.description,
+        c1_0.fuel_level,
+        c1_0.location_x,
+        c1_0.location_y,
+        c1_0.photo_url,
+        c1_0.vin_number,
+        c1_0.year 
+    from
+        cars c1_0 
+    where
+        c1_0.status=?
+2026-05-05T10:55:00.164+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        count(*) 
+    from
+        reviews r1_0
+2026-05-05T10:55:00.166+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        r1_0.review_id,
+        r1_0.admin_reply,
+        r1_0.car_id,
+        r1_0.rating,
+        r1_0.reply_date,
+        r1_0.review_date,
+        r1_0.review_text,
+        r1_0.user_id 
+    from
+        reviews r1_0
+2026-05-05T10:55:00.168+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-05-05T10:55:00.168+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [org.sharing.carsharing.dto.AdminStatsDto@20b0f17b]
+2026-05-05T10:55:00.168+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2026-05-05T10:56:20.841+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/user/verifyUser/7
+2026-05-05T10:56:20.846+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing PUT /api/user/verifyUser/7
+2026-05-05T10:56:20.847+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-05-05T10:56:20.847+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured PUT /api/user/verifyUser/7
+2026-05-05T10:56:20.851+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:56:20.852+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : PUT "/api/user/verifyUser/7", parameters={}
+2026-05-05T10:56:20.852+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to org.sharing.carsharing.controller.UserController#verifyUser(Long, UserVerificationRequest, String)
+2026-05-05T10:56:20.855+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [org.sharing.carsharing.dto.UserVerificationRequest@b79c79a]
+2026-05-05T10:56:20.857+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:56:20.859+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.user_id=?
+2026-05-05T10:56:20.859+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        uc1_0.credentials_id,
+        uc1_0.birth_date,
+        uc1_0.driver_licence,
+        uc1_0.first_name,
+        uc1_0.last_name,
+        uc1_0.passport_number,
+        uc1_0.verification_date,
+        uc1_0.verified 
+    from
+        user_credentials uc1_0 
+    where
+        uc1_0.credentials_id=?
+2026-05-05T10:56:20.859+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.cridentials_id=?
+2026-05-05T10:56:20.875+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    update
+        users 
+    set
+        is_blocked=?,
+        cridentials_id=?,
+        email=?,
+        login=?,
+        password=?,
+        phone=?,
+        rating=?,
+        role=?,
+        service_id=?,
+        service_type=?,
+        is_verified=? 
+    where
+        user_id=?
+2026-05-05T10:56:20.875+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    update
+        user_credentials 
+    set
+        birth_date=?,
+        driver_licence=?,
+        first_name=?,
+        last_name=?,
+        passport_number=?,
+        verification_date=?,
+        verified=? 
+    where
+        credentials_id=?
+2026-05-05T10:56:20.875+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-05-05T10:56:20.875+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [org.sharing.carsharing.dto.UserDto@479ee574]
+2026-05-05T10:56:20.891+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2026-05-05T10:56:20.895+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /api/admin/stats
+2026-05-05T10:56:20.896+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-05-05T10:56:20.896+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /api/admin/stats
+2026-05-05T10:56:20.896+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:56:20.902+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/api/admin/stats", parameters={}
+2026-05-05T10:56:20.903+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to org.sharing.carsharing.controller.AdminController#getStats(String)
+2026-05-05T10:56:20.906+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0 
+    where
+        u1_0.login=?
+2026-05-05T10:56:20.907+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        count(*) 
+    from
+        users u1_0
+2026-05-05T10:56:20.910+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0
+2026-05-05T10:56:20.912+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        u1_0.user_id,
+        u1_0.is_blocked,
+        u1_0.cridentials_id,
+        u1_0.email,
+        u1_0.login,
+        u1_0.password,
+        u1_0.phone,
+        u1_0.rating,
+        u1_0.role,
+        u1_0.service_id,
+        u1_0.service_type,
+        u1_0.is_verified 
+    from
+        users u1_0
+2026-05-05T10:56:20.913+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        count(*) 
+    from
+        cars c1_0
+2026-05-05T10:56:20.914+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        c1_0.car_id,
+        c1_0.model_id,
+        c1_0.status,
+        c1_0.color,
+        c1_0.description,
+        c1_0.fuel_level,
+        c1_0.location_x,
+        c1_0.location_y,
+        c1_0.photo_url,
+        c1_0.vin_number,
+        c1_0.year 
+    from
+        cars c1_0 
+    where
+        c1_0.status=?
+2026-05-05T10:56:20.917+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        c1_0.car_id,
+        c1_0.model_id,
+        c1_0.status,
+        c1_0.color,
+        c1_0.description,
+        c1_0.fuel_level,
+        c1_0.location_x,
+        c1_0.location_y,
+        c1_0.photo_url,
+        c1_0.vin_number,
+        c1_0.year 
+    from
+        cars c1_0 
+    where
+        c1_0.status=?
+2026-05-05T10:56:20.917+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        count(*) 
+    from
+        reviews r1_0
+2026-05-05T10:56:20.917+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        r1_0.review_id,
+        r1_0.admin_reply,
+        r1_0.car_id,
+        r1_0.rating,
+        r1_0.reply_date,
+        r1_0.review_date,
+        r1_0.review_text,
+        r1_0.user_id 
+    from
+        reviews r1_0
+2026-05-05T10:56:20.917+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-05-05T10:56:20.917+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [org.sharing.carsharing.dto.AdminStatsDto@6a6eaab1]
+2026-05-05T10:56:20.917+03:00 DEBUG 21764 --- [Carsharing] [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
