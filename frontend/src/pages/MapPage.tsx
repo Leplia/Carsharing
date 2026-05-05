@@ -324,7 +324,7 @@ const MapPage: React.FC = () => {
   };
 
   // Расчет стоимости поездки
-  const calculateRideCostHandler = async (carId: number, distanceKm: number) => {
+  const calculateRideCostHandler = useCallback(async (carId: number, distanceKm: number) => {
     if (!isAuthenticated || !user) {
       setRideCostError('Требуется авторизация для расчета стоимости');
       return;
@@ -348,12 +348,18 @@ const MapPage: React.FC = () => {
     } finally {
       setRideCostLoading(false);
     }
-  };
+  }, [isAuthenticated, user]);
 
   // Создание заказа
   const handleCreateOrder = async () => {
-    if (!selectedCar || rideCost === null || rideCost === undefined || !isAuthenticated || !user) {
+    if (!selectedCar || !isAuthenticated || !user) {
       setOrderError('Недостаточно данных для создания заказа');
+      return;
+    }
+    
+    // Проверяем, что есть маршрут или хотя бы выбран автомобиль
+    if (!selectedCar) {
+      setOrderError('Выберите автомобиль для создания заказа');
       return;
     }
 
@@ -367,7 +373,7 @@ const MapPage: React.FC = () => {
         throw new Error('Требуется авторизация');
       }
 
-      console.log('Создание заказа для автомобиля:', selectedCar.carId, 'стоимость:', rideCost);
+      console.log('Создание заказа для автомобиля:', selectedCar.carId, 'предварительная стоимость:', rideCost);
       
       // Логирование всех данных для создания Order в БД
       console.log('====== ДАННЫЕ ДЛЯ СОЗДАНИЯ ORDER В БД ПРИ СОЗДАНИИ ЗАКАЗА ======');
@@ -406,14 +412,14 @@ const MapPage: React.FC = () => {
       console.log('   - endpoint:', '/api/orders/create');
       console.log('   - method:', 'POST');
       console.log('   - payload:', { 
-        carId: selectedCar.carId, 
-        price: rideCost 
+        carId: selectedCar.carId
       });
       console.log('====== КОНЕЦ ДАННЫХ ======');
       
       // 1. Создаем заказ (в бэкенде автомобиль автоматически переводится в статус IN_USE)
+      // Цена теперь не передается при создании, она будет рассчитана при завершении заказа
       const order = await createOrder(
-        { carId: selectedCar.carId, price: rideCost },
+        { carId: selectedCar.carId },
         token
       );
       
@@ -598,7 +604,6 @@ const MapPage: React.FC = () => {
             activeOrder.orderId,
             { 
               distanceKm, 
-              spendFuel: fuelConsumed,
               newLocationX: destLat,
               newLocationY: destLng
             },
@@ -612,9 +617,9 @@ const MapPage: React.FC = () => {
           console.log('5. Данные для запроса к бэкенду:');
           console.log('   - endpoint:', `/api/orders/${activeOrder.orderId}/end`);
           console.log('   - method:', 'PUT');
-          console.log('   - payload:', { distanceKm: 0, spendFuel: 0 });
+          console.log('   - payload:', { distanceKm: 0 });
           
-          await endOrder(activeOrder.orderId, { distanceKm: 0, spendFuel: 0 }, token);
+          await endOrder(activeOrder.orderId, { distanceKm: 0 }, token);
         }
         
         console.log('====== КОНЕЦ ДАННЫХ ======');
@@ -826,7 +831,6 @@ const MapPage: React.FC = () => {
         activeOrder.orderId,
         { 
           distanceKm, 
-          spendFuel: fuelConsumed,
           newLocationX: destLat,
           newLocationY: destLng
         },
@@ -942,13 +946,14 @@ const MapPage: React.FC = () => {
     setRideCostError(null);
 
     // Если выбран автомобиль, строим маршрут
+    // Используем current selectedCar из состояния
     if (selectedCar) {
-      buildRoute(selectedCar.locationX, selectedCar.locationY, lat, lng);
+      buildRoute(selectedCar.locationX, selectedCar.locationY, lat, lng, selectedCar.carId);
     }
-  }, [selectedCar]);
+  }, [selectedCar, buildRoute]);
 
   // Построение маршрута
-  const buildRoute = useCallback((fromLat: number, fromLng: number, toLat: number, toLng: number) => {
+  const buildRoute = useCallback((fromLat: number, fromLng: number, toLat: number, toLng: number, carId?: number) => {
     const map = mapRef.current;
     if (!map) return;
 
@@ -986,20 +991,20 @@ const MapPage: React.FC = () => {
         const roundedDistance = parseFloat(distanceKmValue.toFixed(2));
         setDistanceKm(roundedDistance);
         
-        // Если выбран автомобиль, рассчитываем стоимость
-        if (selectedCar && roundedDistance > 0) {
-          calculateRideCostHandler(selectedCar.carId, roundedDistance);
+        // Если передан carId, рассчитываем стоимость
+        if (carId && roundedDistance > 0) {
+          calculateRideCostHandler(carId, roundedDistance);
         }
       }
     });
 
     routingControlRef.current = routingControl;
-  }, [selectedCar]);
+  }, [calculateRideCostHandler]);
 
   // При изменении выбранного автомобиля перестраиваем маршрут
   useEffect(() => {
     if (selectedCar && destLat !== null && destLng !== null) {
-      buildRoute(selectedCar.locationX, selectedCar.locationY, destLat, destLng);
+      buildRoute(selectedCar.locationX, selectedCar.locationY, destLat, destLng, selectedCar.carId);
     }
   }, [selectedCar, destLat, destLng, buildRoute]);
 
@@ -1008,7 +1013,7 @@ const MapPage: React.FC = () => {
     if (selectedCar && distanceKm !== null && distanceKm > 0) {
       calculateRideCostHandler(selectedCar.carId, distanceKm);
     }
-  }, [distanceKm, selectedCar]);
+  }, [distanceKm, selectedCar, calculateRideCostHandler]);
 
   // Фильтрация списка с учетом активного заказа
   const filteredCars = (() => {

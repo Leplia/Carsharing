@@ -28,7 +28,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         boolean enabled = user.getBlocked() == null || !user.getBlocked();
         String roleName = (user.getRole() == Role.ADMIN) ? "ROLE_ADMIN" : "ROLE_USER";
 
-        // Пароль может быть пустым для пользователей, созданных через OAuth.
         String password = user.getPassword() == null ? "" : user.getPassword();
 
         return org.springframework.security.core.userdetails.User.builder()

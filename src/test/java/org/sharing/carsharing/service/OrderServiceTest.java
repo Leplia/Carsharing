@@ -12,6 +12,7 @@ import org.sharing.carsharing.dto.OrderResponseDto;
 import org.sharing.carsharing.mapper.order.OrderMapper;
 import org.sharing.carsharing.model.Car;
 import org.sharing.carsharing.model.Order;
+import org.sharing.carsharing.model.Payment;
 import org.sharing.carsharing.model.User;
 import org.sharing.carsharing.model.enums.CarStatus;
 import org.sharing.carsharing.model.enums.OrderStatus;
@@ -70,20 +71,22 @@ class OrderServiceTest {
         testOrder.setOrderId(1L);
         testOrder.setUser(testUser);
         testOrder.setCar(testCar);
-        testOrder.setStartTime(LocalDateTime.now().minusHours(1));
         testOrder.setStatus(OrderStatus.STARTED);
-        testOrder.setPrice(45.67);
+        testOrder.setPrice(0.0); // Цена будет рассчитана при завершении
         testOrder.setDistance(0.0);
         testOrder.setSpendFuel(0.0);
-        testOrder.setDiscount(0.0);
+        // Создаем payment для order
+        Payment payment = new Payment();
+        payment.setPrice(0.0); // Временное значение
+        payment.setCheque("CHQ-TEST-123");
+        testOrder.setPayment(payment);
+        testOrder.setRatingEdits(0.0f);
 
         createRequest = new CreateOrderRequest();
         createRequest.setCarId(1L);
-        createRequest.setPrice(45.67);
 
         endRequest = new EndOrderRequest();
         endRequest.setDistanceKm(12.5);
-        endRequest.setSpendFuel(2.5);
         endRequest.setNewLocationX(53.9050);
         endRequest.setNewLocationY(27.5620);
     }
@@ -98,7 +101,7 @@ class OrderServiceTest {
         OrderResponseDto expectedDto = new OrderResponseDto();
         expectedDto.setOrderId(1L);
         expectedDto.setStatus("STARTED");
-        expectedDto.setPrice(45.67);
+        expectedDto.setPrice(0.0); // Цена будет 0.0 при создании
         when(orderMapper.toDto(any(Order.class))).thenReturn(expectedDto);
 
         // Act
@@ -108,7 +111,7 @@ class OrderServiceTest {
         assertNotNull(result);
         assertEquals(1L, result.getOrderId());
         assertEquals("STARTED", result.getStatus());
-        assertEquals(45.67, result.getPrice());
+        assertEquals(0.0, result.getPrice());
         
         verify(userRepository, times(1)).findById(1L);
         verify(carsRepository, times(1)).findById(1L);
@@ -178,9 +181,9 @@ class OrderServiceTest {
         OrderResponseDto expectedDto = new OrderResponseDto();
         expectedDto.setOrderId(1L);
         expectedDto.setStatus("COMPLETED");
-        expectedDto.setPrice(45.67);
+        expectedDto.setPrice(50.0); // 12.5 * 4.0 = 50.0
         expectedDto.setDistance(12.5);
-        expectedDto.setSpendFuel(2.5);
+        expectedDto.setSpendFuel(1.875); // 12.5 * 15 / 100 = 1.875
         when(orderMapper.toDto(any(Order.class))).thenReturn(expectedDto);
 
         // Act
@@ -190,8 +193,9 @@ class OrderServiceTest {
         assertNotNull(result);
         assertEquals(1L, result.getOrderId());
         assertEquals("COMPLETED", result.getStatus());
+        assertEquals(50.0, result.getPrice()); // 12.5 * 4.0 = 50.0
         assertEquals(12.5, result.getDistance());
-        assertEquals(2.5, result.getSpendFuel());
+        assertEquals(1.875, result.getSpendFuel());
         
         verify(orderRepository, times(1)).findById(1L);
         verify(orderRepository, times(1)).save(testOrder);
@@ -200,13 +204,13 @@ class OrderServiceTest {
         
         // Verify order was updated
         assertEquals(OrderStatus.COMPLETED, testOrder.getStatus());
-        assertNotNull(testOrder.getEndTime());
         assertEquals(12.5, testOrder.getDistance());
-        assertEquals(2.5, testOrder.getSpendFuel());
+        assertEquals(1.875, testOrder.getSpendFuel()); // 12.5 * 15 / 100 = 1.875
+        assertEquals(50.0, testOrder.getPrice()); // 12.5 * 4.0 = 50.0
         
         // Verify car was updated
         assertEquals(CarStatus.AVAILABLE, testCar.getCarStatus());
-        assertEquals(97, testCar.getFuelLevel()); // 100 - 2.5 = 97.5, but cast to int
+        assertEquals(98, testCar.getFuelLevel()); // 100 - 1.875 = 98.125, but cast to int
         assertEquals(53.9050, testCar.getLocationX());
         assertEquals(27.5620, testCar.getLocationY());
     }
@@ -266,12 +270,13 @@ class OrderServiceTest {
         assertEquals("COMPLETED", result.getStatus());
         
         // Verify order was updated with default values
-        assertEquals(0.0, testOrder.getDistance());
-        assertEquals(0.0, testOrder.getSpendFuel());
+        assertEquals(10.0, testOrder.getDistance()); // default value
+        assertEquals(1.5, testOrder.getSpendFuel()); // 10.0 * 15 / 100 = 1.5
+        assertEquals(40.0, testOrder.getPrice()); // 10.0 * 4.0 = 40.0
         
         // Verify car status changed but fuel and location unchanged
         assertEquals(CarStatus.AVAILABLE, testCar.getCarStatus());
-        assertEquals(100, testCar.getFuelLevel()); // unchanged
+        assertEquals(98, testCar.getFuelLevel()); // 100 - 1.5 = 98.5, but cast to int
         assertEquals(53.9045, testCar.getLocationX()); // unchanged
         assertEquals(27.5615, testCar.getLocationY()); // unchanged
     }
@@ -318,7 +323,7 @@ class OrderServiceTest {
     void getUserOrders_Found() {
         // Arrange
         List<Order> orders = List.of(testOrder);
-        when(orderRepository.findByUserUserIdOrderByStartTimeDesc(1L))
+        when(orderRepository.findByUserUserIdOrderByOrderIdDesc(1L))
             .thenReturn(orders);
         
         OrderResponseDto expectedDto = new OrderResponseDto();
@@ -333,14 +338,14 @@ class OrderServiceTest {
         assertEquals(1, result.size());
         assertEquals(1L, result.get(0).getOrderId());
         
-        verify(orderRepository, times(1)).findByUserUserIdOrderByStartTimeDesc(1L);
+        verify(orderRepository, times(1)).findByUserUserIdOrderByOrderIdDesc(1L);
         verify(orderMapper, times(1)).toDto(testOrder);
     }
 
     @Test
     void getUserOrders_EmptyList() {
         // Arrange
-        when(orderRepository.findByUserUserIdOrderByStartTimeDesc(1L))
+        when(orderRepository.findByUserUserIdOrderByOrderIdDesc(1L))
             .thenReturn(List.of());
 
         // Act
@@ -349,7 +354,7 @@ class OrderServiceTest {
         // Assert
         assertNotNull(result);
         assertTrue(result.isEmpty());
-        verify(orderRepository, times(1)).findByUserUserIdOrderByStartTimeDesc(1L);
+        verify(orderRepository, times(1)).findByUserUserIdOrderByOrderIdDesc(1L);
         verify(orderMapper, never()).toDto(any(Order.class));
     }
 }

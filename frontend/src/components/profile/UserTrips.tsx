@@ -7,11 +7,7 @@ interface Props {
   userId: number;
 }
 
-const formatDate = (iso: string) =>
-    new Date(iso).toLocaleString('ru-RU', {
-      day: '2-digit', month: '2-digit', year: 'numeric',
-      hour: '2-digit', minute: '2-digit',
-    });
+const formatOrderId = (orderId: number) => `Заказ #${orderId}`;
 
 const STATUS_LABELS: Record<string, string> = {
   STARTED: 'В процессе',
@@ -56,11 +52,8 @@ const UserTrips: React.FC<Props> = ({ userId }) => {
         </div>
         {orders.map((order) => (
             <div key={order.orderId} className="profile-trip-item">
-              <div className="profile-trip-date">
-                <span className="profile-trip-date-start">{formatDate(order.startTime)}</span>
-                {order.endTime && (
-                    <span className="profile-trip-date-end">— {formatDate(order.endTime)}</span>
-                )}
+              <div className="profile-trip-id">
+                <span className="profile-trip-id-text">{formatOrderId(order.orderId)}</span>
               </div>
               <div className="profile-trip-status">
             <span className={`profile-trip-status-badge ${order.status === 'STARTED' ? 'started' : 'completed'}`}>

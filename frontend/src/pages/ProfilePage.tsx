@@ -4,6 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import authApi, { BASE_URL } from '../api/auth.api';
 import { Role } from '../types/auth';
 import UserTrips from '../components/profile/UserTrips';
+import { getUserOrders } from '../api/userOrders.api';
+import { OrderDto } from '../api/order.api';
 import '../styles/pages/ProfilePage.css';
 
 const ProfilePage: React.FC = () => {
@@ -20,6 +22,14 @@ const ProfilePage: React.FC = () => {
         phone: user?.phone || '',
     });
 
+    const [orders, setOrders] = useState<OrderDto[]>([]);
+    const [stats, setStats] = useState({
+        totalTrips: 0,
+        totalDistance: 0,
+        totalSpent: 0,
+        completedTrips: 0
+    });
+
     useEffect(() => {
         setEditData({
             login: user?.login || '',
@@ -27,6 +37,60 @@ const ProfilePage: React.FC = () => {
             phone: user?.phone || '',
         });
     }, [user]);
+
+    // Загрузка заказов пользователя для статистики
+    useEffect(() => {
+        const loadUserOrders = async () => {
+            if (!user) return;
+            
+            const token = authApi.getAccessToken();
+            if (!token) return;
+            
+            try {
+                const userOrders = await getUserOrders(token);
+                setOrders(userOrders);
+                
+                // Рассчитываем статистику
+                calculateStats(userOrders);
+            } catch (error) {
+                console.error('Ошибка загрузки заказов:', error);
+            }
+        };
+        
+        loadUserOrders();
+    }, [user]);
+
+    const calculateStats = (ordersList: OrderDto[]) => {
+        let totalTrips = 0;
+        let totalDistance = 0;
+        let totalSpent = 0;
+        let completedTrips = 0;
+        
+        ordersList.forEach(order => {
+            totalTrips++;
+            
+            if (order.status === 'COMPLETED') {
+                completedTrips++;
+                
+                // Суммируем расстояние
+                if (order.distance !== null && order.distance !== undefined) {
+                    totalDistance += order.distance;
+                }
+                
+                // Суммируем потраченные деньги
+                if (order.price !== null && order.price !== undefined) {
+                    totalSpent += order.price;
+                }
+            }
+        });
+        
+        setStats({
+            totalTrips,
+            totalDistance,
+            totalSpent,
+            completedTrips
+        });
+    };
 
     const isVerified = !!user?.verified;
 
@@ -252,15 +316,19 @@ const ProfilePage: React.FC = () => {
                             <div className="profile-stat-label">Рейтинг</div>
                         </div>
                         <div className="profile-stat">
-                            <div className="profile-stat-val">0</div>
-                            <div className="profile-stat-label">Поездок</div>
+                            <div className="profile-stat-val">{stats.totalTrips}</div>
+                            <div className="profile-stat-label">Всего поездок</div>
                         </div>
                         <div className="profile-stat">
-                            <div className="profile-stat-val">0 км</div>
+                            <div className="profile-stat-val">{stats.completedTrips}</div>
+                            <div className="profile-stat-label">Завершено</div>
+                        </div>
+                        <div className="profile-stat">
+                            <div className="profile-stat-val">{stats.totalDistance.toFixed(1)} км</div>
                             <div className="profile-stat-label">Пройдено</div>
                         </div>
                         <div className="profile-stat">
-                            <div className="profile-stat-val">0 BYN</div>
+                            <div className="profile-stat-val">{stats.totalSpent.toFixed(2)} BYN</div>
                             <div className="profile-stat-label">Потрачено</div>
                         </div>
                     </div>

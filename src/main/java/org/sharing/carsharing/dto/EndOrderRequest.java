@@ -9,7 +9,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class EndOrderRequest {
     private Double distanceKm;
-    private Double spendFuel;
     private Double newLocationX;
     private Double newLocationY;
 }

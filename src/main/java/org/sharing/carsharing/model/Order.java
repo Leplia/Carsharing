@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.sharing.carsharing.model.enums.OrderStatus;
 
-import java.time.LocalDateTime;
-
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,12 +24,6 @@ public class Order {
     @JoinColumn(name="car_id",nullable = false)
     private Car car;
 
-    @Column(name="start_time")
-    private LocalDateTime startTime;
-
-    @Column(name="end_time")
-    private LocalDateTime endTime;
-
     @Enumerated(EnumType.STRING)
     @Column(name="status")
     private OrderStatus status;
@@ -45,11 +37,8 @@ public class Order {
     @Column(name = "price")
     private Double price;
 
-    @Column(name="discount")
-    private Double discount;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="payment_id", nullable = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name="payment_id", nullable = false)
     private Payment payment;
 
     @Column(name="rating_edits")

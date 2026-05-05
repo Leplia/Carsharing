@@ -7,6 +7,7 @@ import org.sharing.carsharing.dto.OrderResponseDto;
 import org.sharing.carsharing.mapper.order.OrderMapper;
 import org.sharing.carsharing.model.Car;
 import org.sharing.carsharing.model.Order;
+import org.sharing.carsharing.model.Payment;
 import org.sharing.carsharing.model.User;
 import org.sharing.carsharing.model.enums.CarStatus;
 import org.sharing.carsharing.model.enums.OrderStatus;
@@ -32,7 +33,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderResponseDto createOrder(Long userId, CreateOrderRequest request) {
-        // Валидация входных данных
         if (request.getCarId() == null || request.getCarId() <= 0) {
             throw new RuntimeException("Invalid car ID: " + request.getCarId());
         }
@@ -52,22 +52,18 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         order.setUser(user);
         order.setCar(car);
-        order.setStartTime(LocalDateTime.now());
         order.setStatus(OrderStatus.STARTED);
-        
-        // Валидация и установка цены
-        Double price = request.getPrice() != null ? request.getPrice() : 0.0;
-        if (price < 0) {
-            throw new RuntimeException("Price cannot be negative: " + price);
-        }
-        order.setPrice(price);
         
         order.setDistance(0.0);
         order.setSpendFuel(0.0);
-        order.setDiscount(0.0);
+        order.setPrice(0.0);
+        
+        Payment payment = new Payment();
+        payment.setPrice(0.0); // Временное значение
+        payment.setCheque("CHQ-" + System.currentTimeMillis() + "-" + userId);
+        order.setPayment(payment);
+        
         order.setRatingEdits(0.0f);
-        // endTime остается null для начатого заказа
-        // payment остается null, будет установлен позже при оплате
 
         return orderMapper.toDto(orderRepository.save(order));
     }
@@ -82,23 +78,33 @@ public class OrderServiceImpl implements OrderService {
             throw new RuntimeException("Order already completed");
         }
 
-        order.setEndTime(LocalDateTime.now());
+        Double distanceKm = request.getDistanceKm() != null ? request.getDistanceKm() : 10.0;
+        order.setDistance(distanceKm);
+        
+        Double spendFuel = (distanceKm * 15.0) / 100.0;
+        order.setSpendFuel(spendFuel);
+        
+
+        Double price = distanceKm * 4.0;
+        order.setPrice(price);
+        
+        order.getPayment().setPrice(price);
+        
         order.setStatus(OrderStatus.COMPLETED);
-        order.setDistance(request.getDistanceKm() != null ? request.getDistanceKm() : 0.0);
-        order.setSpendFuel(request.getSpendFuel() != null ? request.getSpendFuel() : 0.0);
-
+        
         Car car = order.getCar();
-
-        if (request.getSpendFuel() != null) {
-            int newFuel = (int) Math.max(0, car.getFuelLevel() - request.getSpendFuel());
-            car.setFuelLevel(newFuel);
-        }
-
+        
+        int newFuel = (int) Math.max(0, car.getFuelLevel() - spendFuel);
+        car.setFuelLevel(newFuel);
+        
         if (request.getNewLocationX() != null && request.getNewLocationY() != null) {
             car.setLocationX(request.getNewLocationX());
             car.setLocationY(request.getNewLocationY());
         }
-
+        
+        Float ratingChange = (float) (Math.random() * 0.3 - 0.2);
+        order.setRatingEdits(ratingChange);
+        
         car.setCarStatus(CarStatus.AVAILABLE);
         carsRepository.save(car);
 
@@ -114,7 +120,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderResponseDto> getUserOrders(Long userId) {
-        return orderRepository.findByUserUserIdOrderByStartTimeDesc(userId)
+        return orderRepository.findByUserUserIdOrderByOrderIdDesc(userId)
                 .stream()
                 .map(orderMapper::toDto)
                 .toList();

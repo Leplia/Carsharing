@@ -343,7 +343,7 @@
 /* Stats */
 .profile-stats-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 16px;
 }
 
@@ -352,6 +352,7 @@
     border-radius: 12px;
     padding: 20px;
     text-align: center;
+    border: 1px solid #e5e7eb;
 }
 
 .profile-stat-val {
@@ -364,6 +365,8 @@
 .profile-stat-label {
     font-size: 13px;
     color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 /* Empty trips */

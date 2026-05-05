@@ -4,28 +4,23 @@ export interface OrderDto {
   orderId: number;
   carId: number;
   userId: number;
-  startTime: string;
-  endTime: string | null;
   status: 'STARTED' | 'COMPLETED' | 'CANCELLED' | 'PAID' | 'UNPAID' | 'IN_PROCESS';
   price: number;
   distance: number | null;
   spendFuel: number | null;
-  discount: number | null;
+  ratingEdits: number | null;
 }
 
 interface CreateOrderPayload {
   carId: number;
-  price: number;
 }
 
 interface EndOrderPayload {
   distanceKm: number;
-  spendFuel: number;
 }
 
 interface EndOrderWithLocationPayload {
   distanceKm: number;
-  spendFuel: number;
   newLocationX: number;
   newLocationY: number;
 }

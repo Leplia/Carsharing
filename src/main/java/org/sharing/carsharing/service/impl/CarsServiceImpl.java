@@ -58,7 +58,6 @@ public class CarsServiceImpl implements CarsService {
         car.setDescription(carAddRequest.getDescription());
         car.setPhotoUrl(carAddRequest.getPhotoUrl());
         
-        // Найти CarModel по ID
         CarModel carModel = carModelRepository.findById(carAddRequest.getCarModelId())
                 .orElseThrow(() -> new RuntimeException("CarModel not found with id: " + carAddRequest.getCarModelId()));
         car.setCarModel(carModel);
