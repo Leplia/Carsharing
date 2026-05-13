@@ -350,6 +350,55 @@ const MapPage: React.FC = () => {
     }
   }, [isAuthenticated, user]);
 
+  // Построение маршрута
+  const buildRoute = useCallback((fromLat: number, fromLng: number, toLat: number, toLng: number, carId?: number) => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    // Удаляем предыдущий маршрут
+    if (routingControlRef.current) {
+      try {
+        map.removeControl(routingControlRef.current);
+      } catch (error) {
+        console.error('Ошибка при удалении предыдущего маршрута:', error);
+      }
+      routingControlRef.current = null;
+    }
+
+    // Создаем новый маршрут
+    const routingControl = L.Routing.control({
+      waypoints: [
+        L.latLng(fromLat, fromLng),
+        L.latLng(toLat, toLng)
+      ],
+      routeWhileDragging: false,
+      showAlternatives: false,
+      lineOptions: {
+        styles: [{ color: '#2563eb', weight: 4, opacity: 0.7 }],
+        extendToWaypoints: true,
+        missingRouteTolerance: 10
+      }
+    }).addTo(map);
+
+    // Обработка завершения построения маршрута
+    routingControl.on('routesfound', (e: any) => {
+      const routes = e.routes;
+      if (routes && routes.length > 0) {
+        const distanceMeters = routes[0].summary.totalDistance;
+        const distanceKmValue = distanceMeters / 1000;
+        const roundedDistance = parseFloat(distanceKmValue.toFixed(2));
+        setDistanceKm(roundedDistance);
+        
+        // Если передан carId, рассчитываем стоимость
+        if (carId && roundedDistance > 0) {
+          calculateRideCostHandler(carId, roundedDistance);
+        }
+      }
+    });
+
+    routingControlRef.current = routingControl;
+  }, [calculateRideCostHandler]);
+
   // Создание заказа
   const handleCreateOrder = async () => {
     if (!selectedCar || !isAuthenticated || !user) {
@@ -951,55 +1000,6 @@ const MapPage: React.FC = () => {
       buildRoute(selectedCar.locationX, selectedCar.locationY, lat, lng, selectedCar.carId);
     }
   }, [selectedCar, buildRoute]);
-
-  // Построение маршрута
-  const buildRoute = useCallback((fromLat: number, fromLng: number, toLat: number, toLng: number, carId?: number) => {
-    const map = mapRef.current;
-    if (!map) return;
-
-    // Удаляем предыдущий маршрут
-    if (routingControlRef.current) {
-      try {
-        map.removeControl(routingControlRef.current);
-      } catch (error) {
-        console.error('Ошибка при удалении предыдущего маршрута:', error);
-      }
-      routingControlRef.current = null;
-    }
-
-    // Создаем новый маршрут
-    const routingControl = L.Routing.control({
-      waypoints: [
-        L.latLng(fromLat, fromLng),
-        L.latLng(toLat, toLng)
-      ],
-      routeWhileDragging: false,
-      showAlternatives: false,
-      lineOptions: {
-        styles: [{ color: '#2563eb', weight: 4, opacity: 0.7 }],
-        extendToWaypoints: true,
-        missingRouteTolerance: 10
-      }
-    }).addTo(map);
-
-    // Обработка завершения построения маршрута
-    routingControl.on('routesfound', (e: any) => {
-      const routes = e.routes;
-      if (routes && routes.length > 0) {
-        const distanceMeters = routes[0].summary.totalDistance;
-        const distanceKmValue = distanceMeters / 1000;
-        const roundedDistance = parseFloat(distanceKmValue.toFixed(2));
-        setDistanceKm(roundedDistance);
-        
-        // Если передан carId, рассчитываем стоимость
-        if (carId && roundedDistance > 0) {
-          calculateRideCostHandler(carId, roundedDistance);
-        }
-      }
-    });
-
-    routingControlRef.current = routingControl;
-  }, [calculateRideCostHandler]);
 
   // При изменении выбранного автомобиля перестраиваем маршрут
   useEffect(() => {
